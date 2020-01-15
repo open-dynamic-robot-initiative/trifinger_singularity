@@ -1,0 +1,62 @@
+Bootstrap: docker
+From: osrf/ros:kinetic-desktop
+
+# To save time when rebuilding the image, you can pull the ROS image once and
+# then use the following instead:
+#Bootstrap: localimage
+#From: ./ros_kinetic-desktop.sif
+
+%post
+    apt-get update
+    apt-get dist-upgrade -y
+
+    apt-get install -y clang clang-format
+
+    # missing dependencies
+    apt-get install -y \
+        wget \
+        freeglut3-dev \
+        ros-kinetic-realtime-tools \
+        python3-pip \
+        python3-progressbar \
+        python3-empy \
+        python3-numpy \
+        python3-yaml \
+        libcereal-dev \
+        libopencv-dev  # FIXME fix code so that ROS-version of OpenCV is used
+
+    apt-get install -y \
+        libxmu-dev \
+        libncurses5-dev \
+        libedit-dev
+
+    # Need Python 3 version of several packages to build with Python 3
+    pip3 --no-cache-dir install catkin-pkg rospkg catkin_tools
+
+    # for building documentation
+    apt-get install doxygen
+    pip3 --no-cache-dir install doxypypy
+
+    # for simulation
+    pip3 --no-cache-dir install pybullet gym ipython
+    apt-get install -y python3-matplotlib
+
+    # clean up
+    apt-get clean
+
+    # create a setup file
+    echo ". /opt/ros/kinetic/setup.bash
+alias catmake='catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3'
+alias catbuild='catkin build -DPYTHON_EXECUTABLE=/usr/bin/python3'
+" > /setup.bash
+
+
+%labels
+    Version 0.5.0
+
+%help
+    Container for building the BLMC_EI project.
+    Run it with `singularity shell` at the root of your workspace, set up the
+    environment by executing `source /setup.sh` and build with `catbuild` (which
+    is an alias for `catkin build` that sets the Python executable to use Python
+    3) or `catmake` (same but using `catkin_make`).
