@@ -20,7 +20,6 @@ From: osrf/ros:kinetic-desktop
         python3-pip \
         python3-progressbar \
         python3-empy \
-        python3-numpy \
         python3-yaml \
         libcereal-dev \
         libopencv-dev  # FIXME fix code so that ROS-version of OpenCV is used
@@ -44,6 +43,9 @@ From: osrf/ros:kinetic-desktop
 
     # some tools for debugging
     apt-get install -y gdb tmux
+    
+    #upgrade numpy 
+    pip3 --no-cache-dir install numpy --upgrade
 
     # clean up
     apt-get clean
@@ -56,7 +58,7 @@ alias catbuild='catkin build -DPYTHON_EXECUTABLE=/usr/bin/python3'
 
 
 %labels
-    Version 0.6.0
+    Version 0.6.1
 
 %help
     Container for building the BLMC_EI project.
