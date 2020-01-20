@@ -1,17 +1,17 @@
 Bootstrap: docker
 From: osrf/ros:kinetic-desktop
-
+ 
 # To save time when rebuilding the image, you can pull the ROS image once and
 # then use the following instead:
 #Bootstrap: localimage
 #From: ./ros_kinetic-desktop.sif
-
+ 
 %post
     apt-get update
     apt-get dist-upgrade -y
-
+ 
     apt-get install -y clang clang-format
-
+ 
     # missing dependencies
     apt-get install -y \
         wget \
@@ -24,36 +24,37 @@ From: osrf/ros:kinetic-desktop
         python3-yaml \
         libcereal-dev \
         libopencv-dev  # FIXME fix code so that ROS-version of OpenCV is used
-
+ 
     apt-get install -y \
         libxmu-dev \
         libncurses5-dev \
         libedit-dev
-
+ 
     # Need Python 3 version of several packages to build with Python 3
     pip3 --no-cache-dir install catkin-pkg rospkg catkin_tools
-
+ 
     # for building documentation
     apt-get install doxygen
     pip3 --no-cache-dir install doxypypy
 
     # for simulation
-    pip3 --no-cache-dir install pybullet gym ipython
+    pip3 --no-cache-dir install pybullet gym
     apt-get install -y python3-matplotlib
-
+    apt install -y ipython3
+ 
     # clean up
     apt-get clean
-
+ 
     # create a setup file
     echo ". /opt/ros/kinetic/setup.bash
 alias catmake='catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3'
 alias catbuild='catkin build -DPYTHON_EXECUTABLE=/usr/bin/python3'
 " > /setup.bash
-
-
+ 
+ 
 %labels
-    Version 0.5.0
-
+    Version 0.5.1
+ 
 %help
     Container for building the BLMC_EI project.
     Run it with `singularity shell` at the root of your workspace, set up the
