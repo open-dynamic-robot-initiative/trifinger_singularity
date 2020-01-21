@@ -1,0 +1,6 @@
+Bootstrap: localimage
+From: ./blmc_ei.sif
+
+%post
+
+	pip3 install tensorflow==1.14 
