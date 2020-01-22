@@ -1,0 +1,10 @@
+Bootstrap: localimage
+From: ./blmc_ei.sif
+
+%post
+      apt-get update && apt-get install cmake libopenmpi-dev python3-dev zlib1g-dev
+
+      pip3 install tensorflow==1.14 pandas==0.24.2
+
+      git clone https://github.com/hill-a/stable-baselines && cd stable-baselines
+      pip3 install -e .[mpi, docs, tests]
