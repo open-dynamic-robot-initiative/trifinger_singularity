@@ -30,9 +30,10 @@ ros kinetic results in the cv2 file from python2.7 even when run from python3.
 
 - To run stable_baselines, clone it in your home directory, and then export the PYTHONPATH to point at it when you run the container. So,
   
-  '''
-  git clone https://github.com/hill-a/stable-baselines && cd stable-baselines
+  ```
+  git clone https://github.com/hill-a/stable-baselines
   singularity shell <....>
   export PYTHONPATH=/home/$USER/stable-baselines
+  ```
 
   Good to go!
