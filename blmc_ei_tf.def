@@ -4,3 +4,6 @@ From: ./blmc_ei.sif
 %post
 
 	pip3 install tensorflow==1.14 
+	
+	apt-get update && apt-get install cmake libopenmpi-dev python3-dev zlib1g-dev
+    pip3 install stable-baselines[mpi]
