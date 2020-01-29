@@ -12,9 +12,11 @@ command (you may need to adjust the file names according to your needs):
 The `--fakeroot` option enables building without `sudo`.
 
 ## sourcing
-For pinocchio, 
+1. For pinocchio, 
     source /openrobots_setup.bash
-For building the container (do not do this if you want to import stable_baselines),
+    
+2. For building the container (do not do this if you want to import stable_baselines),
     source /setup.bash
-For importing the workspace packages,
+    
+3. For importing the workspace packages,
     source workspace/devel/setup.bash
