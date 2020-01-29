@@ -10,21 +10,21 @@ From: osrf/ros:kinetic-desktop
     apt-get update
     apt-get dist-upgrade -y
 
-    apt-get install -y clang clang-format
+    # Build Dependencies
+    # ==================
 
-    # missing dependencies
+    apt-get install -y clang clang-format wget python3-pip
+
+    # FIXME libopencv-dev should not be installed here, ROS already brings its
+    # own, newer version of OpenCV.  Fix code so that ROS-version of OpenCV is
+    # used.
     apt-get install -y \
-        wget \
         freeglut3-dev \
         ros-kinetic-realtime-tools \
-        python3-pip \
-        python3-progressbar \
         python3-empy \
         python3-yaml \
         libcereal-dev \
-        libopencv-dev  # FIXME fix code so that ROS-version of OpenCV is used
-
-    apt-get install -y \
+        libopencv-dev \
         libxmu-dev \
         libncurses5-dev \
         libedit-dev
@@ -36,29 +36,65 @@ From: osrf/ros:kinetic-desktop
     apt-get install doxygen
     pip3 --no-cache-dir install doxypypy
 
+
+    # Tools for Debugging
+    # ===================
+
+    apt-get install -y gdb tmux less ipython3 python3-ipdb
+
+
+    # Run Dependencies
+    # ================
+
+    apt-get install -y \
+        python3-progressbar \
+        python3-matplotlib
+
     # for simulation
     pip3 --no-cache-dir install pybullet gym
-    apt-get install -y python3-matplotlib
-    apt install -y ipython3
 
-    # some tools for debugging
-    apt-get install -y gdb tmux
-    
-    #upgrade numpy 
+    # upgrade numpy (TODO: mention why this is needed)
     pip3 --no-cache-dir install numpy --upgrade
+
+
+    # Add robotpkg apt repository
+    tee /etc/apt/sources.list.d/robotpkg.list <<EOF
+deb [arch=amd64] http://robotpkg.openrobots.org/wip/packages/debian/pub $(lsb_release -sc) robotpkg
+deb [arch=amd64] http://robotpkg.openrobots.org/packages/debian/pub $(lsb_release -sc) robotpkg
+EOF
+    # Register the authentication certificate of robotpkg
+    curl http://robotpkg.openrobots.org/packages/debian/robotpkg.key | apt-key add -
+    apt-get update
+    # Note: for some reason, installation fails if the above packages are all
+    # combined in one `apt-get install` call.
+    apt-get install -y robotpkg-py35-pinocchio
+    apt-get install -y robotpkg-py35-crocoddyl
+    apt-get install -y robotpkg-gepetto-viewer
+    apt-get install -y robotpkg-py35-qt4-gepetto-viewer-corba
+
 
     # clean up
     apt-get clean
+
+
+    # setup file for openrobots stuff (in its own file so it can be called
+    # separately)
+    echo "export PATH=/opt/openrobots/bin:\$PATH
+export PKG_CONFIG_PATH=/opt/openrobots/lib/pkgconfig:\$PKG_CONFIG_PATH
+export LD_LIBRARY_PATH=/opt/openrobots/lib:\$LD_LIBRARY_PATH
+export PYTHONPATH=/opt/openrobots/lib/python3.5/site-packages:\$PYTHONPATH
+" >> /openrobots_setup.bash
 
     # create a setup file
     echo ". /opt/ros/kinetic/setup.bash
 alias catmake='catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3'
 alias catbuild='catkin build -DPYTHON_EXECUTABLE=/usr/bin/python3'
+source /openrobots_setup.bash
 " > /setup.bash
 
 
 %labels
-    Version 0.6.1
+    Version 0.7.0
 
 %help
     Container for building the BLMC_EI project.
