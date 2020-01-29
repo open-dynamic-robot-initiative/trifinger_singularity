@@ -76,20 +76,21 @@ EOF
     # clean up
     apt-get clean
 
-    # create a setup file
-    echo ". /opt/ros/kinetic/setup.bash
-alias catmake='catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3'
-alias catbuild='catkin build -DPYTHON_EXECUTABLE=/usr/bin/python3'
-" > /setup.bash
 
-    # Add openrobots stuff to path variables
+    # setup file for openrobots stuff (in its own file so it can be called
+    # separately)
     echo "export PATH=/opt/openrobots/bin:\$PATH
 export PKG_CONFIG_PATH=/opt/openrobots/lib/pkgconfig:\$PKG_CONFIG_PATH
 export LD_LIBRARY_PATH=/opt/openrobots/lib:\$LD_LIBRARY_PATH
 export PYTHONPATH=/opt/openrobots/lib/python3.5/site-packages:\$PYTHONPATH
-" >> /setup.bash
+" >> /openrobots_setup.bash
 
-
+    # create a setup file
+    echo ". /opt/ros/kinetic/setup.bash
+alias catmake='catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3'
+alias catbuild='catkin build -DPYTHON_EXECUTABLE=/usr/bin/python3'
+source /openrobots_setup.bash
+" > /setup.bash
 
 
 %labels
