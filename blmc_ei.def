@@ -65,7 +65,12 @@ EOF
     # Register the authentication certificate of robotpkg
     curl http://robotpkg.openrobots.org/packages/debian/robotpkg.key | apt-key add -
     apt-get update
+    # Note: for some reason, installation fails if the above packages are all
+    # combined in one `apt-get install` call.
     apt-get install -y robotpkg-py35-pinocchio
+    apt-get install -y robotpkg-py35-crocoddyl
+    apt-get install -y robotpkg-gepetto-viewer
+    apt-get install -y robotpkg-py35-qt4-gepetto-viewer-corba
 
 
     # clean up
