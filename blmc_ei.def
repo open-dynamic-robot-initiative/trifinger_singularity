@@ -55,6 +55,8 @@ From: osrf/ros:kinetic-desktop
 
     # upgrade numpy (TODO: mention why this is needed)
     pip3 --no-cache-dir install numpy --upgrade
+    pip3 --no-cache-dir install transformations
+
 
 
     # Add robotpkg apt repository
@@ -94,7 +96,7 @@ source /openrobots_setup.bash
 
 
 %labels
-    Version 0.7.0
+    Version 0.8.0
 
 %help
     Container for building the BLMC_EI project.
