@@ -52,6 +52,8 @@ From: osrf/ros:kinetic-desktop
 
     # upgrade numpy (TODO: mention why this is needed)
     pip3 --no-cache-dir install numpy --upgrade
+    pip3 --no-cache-dir install transformations
+
 
     # for simulation
     pip3 --no-cache-dir install pybullet gym
@@ -94,7 +96,7 @@ source /openrobots_setup.bash
 " > /setup.bash
 
 %labels
-    Version 0.7.0
+    Version 0.8.0
 
 %help
     Container for building the BLMC_EI project.
