@@ -60,7 +60,8 @@ From: osrf/ros:kinetic-desktop
 
     # for rl
     apt-get install -y libopenmpi-dev zlib1g-dev
-    pip3 install tensorflow==1.14 pandas==0.24.2 mpi4py joblib
+    pip3 --no-cache-dir install tensorflow==1.14 pandas==0.24.2 mpi4py joblib
+    pip3 --no-cache-dir install opencv-python
 
     # Add robotpkg apt repository
     tee /etc/apt/sources.list.d/robotpkg.list <<EOF
