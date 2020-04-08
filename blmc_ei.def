@@ -29,6 +29,9 @@ From: osrf/ros:kinetic-desktop
         libncurses5-dev \
         libedit-dev
 
+    # upgrade pip
+    pip3 --no-cache-dir install --upgrade pip
+
     # Need Python 3 version of several packages to build with Python 3
     pip3 --no-cache-dir install catkin-pkg rospkg catkin_tools
 
