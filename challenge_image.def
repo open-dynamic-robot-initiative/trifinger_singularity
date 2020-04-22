@@ -1,0 +1,57 @@
+Bootstrap: localimage
+From: ./blmc_ei.sif
+
+%setup
+    ws_tmp_dir=$(mktemp -d -t build_challenge_image-XXXXXXXXXX)
+    cd ${ws_tmp_dir}
+
+    echo "Create workspace in ${ws_tmp_dir}"
+
+    git clone git@gitlab.is.tue.mpg.de:robotics/treep_robotics.git
+    git clone git@github.com:machines-in-motion/treep_machines_in_motion.git
+    treep --seq-clone BLMC_EI
+
+    # checkout the challenge tag to ensure fixed version of the code
+    # TODO this tag actually needs to be created everywhere
+    treep --checkout-branch trifinger_challenge_v1.0.0
+
+    # copy workspace into the image, omitting git information
+    rsync -rl --exclude ".git" workspace/ ${SINGULARITY_ROOTFS}/opt/blmc_ei
+
+    cd -
+    rm -rf $(ws_tmp_dir)
+
+%post
+    NOW=`date`
+    echo "export IMAGE_BUILD_DATE=\"${NOW}\"" >> $SINGULARITY_ENVIRONMENT
+
+    cd /opt/blmc_ei
+    bash -c ". /setup.bash; catbuild"
+    echo ". /opt/blmc_ei/devel/setup.bash" >> /setup.bash
+
+    # %environment does not seem to work when bootstrapping localimage...
+    echo "export WORKSPACE=/ws" >> $SINGULARITY_ENVIRONMENT
+    echo "export RUN_SCRIPT=/ws/src/usercode/run" >> $SINGULARITY_ENVIRONMENT
+
+    # FIXME this is supposed to work, why does it not?
+#%environment
+#    WORKSPACE=/ws
+#    RUN_SCRIPT=${WORKSPACE}/src/usercode/run
+
+%apprun build
+    # build the workspace (assuming it is bound in ${WORKSPACE})
+    cd ${WORKSPACE}
+    bash -c ". /setup.bash; catbuild"
+
+%apphelp build
+
+    Assumes that the user workspace is bound at `${WORKSPACE}` and simply runs
+    `catbuild` there.
+
+%apprun run
+    bash -c ". /setup.bash; ${RUN_SCRIPT}"
+
+%apphelp run
+
+    Assumes that the user workspace is bound at `${WORKSPACE}` and executes
+    `${RUN_SCRIPT}`.
