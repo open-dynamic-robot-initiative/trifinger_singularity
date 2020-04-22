@@ -88,7 +88,7 @@ EOF
     # create a setup file
     echo ". /opt/ros/kinetic/setup.bash
 alias catmake='catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3'
-alias catbuild='catkin build -DPYTHON_EXECUTABLE=/usr/bin/python3'
+catbuild() { catkin build -DPYTHON_EXECUTABLE=/usr/bin/python3 \"\$@\"; }
 " > /setup.bash
 
 %environment
@@ -98,7 +98,7 @@ alias catbuild='catkin build -DPYTHON_EXECUTABLE=/usr/bin/python3'
     export PYTHONPATH=/opt/openrobots/lib/python3.5/site-packages:$PYTHONPATH
 
 %labels
-    Version 0.9.2
+    Version 0.9.3
 
 %help
     Container for building the BLMC_EI project.
