@@ -1,108 +1,45 @@
-Bootstrap: docker
-From: osrf/ros:kinetic-desktop
+# Install the BLMC_EI project software in the image so it can be used without
+# building
+Bootstrap: localimage
+From: ./blmc_ei_base.sif
 
-# To save time when rebuilding the image, you can pull the ROS image once and
-# then use the following instead:
-#Bootstrap: localimage
-#From: ./ros_kinetic-desktop.sif
+%setup
+    ws_tmp_dir=$(mktemp -d -t build_challenge_image-XXXXXXXXXX)
+    cd ${ws_tmp_dir}
+
+    echo "Create workspace in ${ws_tmp_dir}"
+
+    git clone git@gitlab.is.tue.mpg.de:robotics/treep_robotics.git
+    git clone git@github.com:machines-in-motion/treep_machines_in_motion.git
+    treep --seq-clone BLMC_EI
+
+    # checkout the challenge tag to ensure fixed version of the code
+    # TODO this tag actually needs to be created everywhere
+    treep --checkout-branch trifinger_challenge_v1.0.0
+
+    # copy workspace into the image, omitting git information
+    rsync -rl --exclude ".git" workspace/ ${SINGULARITY_ROOTFS}/opt/blmc_ei
+
+    cd -
+    rm -rf ${ws_tmp_dir}
 
 %post
-    apt-get update
-    apt-get dist-upgrade -y
+    NOW=`date`
+    echo "export IMAGE_BUILD_DATE=\"${NOW}\"" >> $SINGULARITY_ENVIRONMENT
 
-    # Build Dependencies
-    # ==================
+    cd /opt/blmc_ei
+    bash -c ". /setup.bash; catbuild"
+    echo ". /opt/blmc_ei/devel/setup.bash" >> /setup.bash
 
-    apt-get install -y clang clang-format wget python3-pip
+    # %environment does not seem to work when bootstrapping localimage...
+    echo "export WORKSPACE=/ws" >> $SINGULARITY_ENVIRONMENT
+    echo "export RUN_SCRIPT=/ws/src/usercode/run" >> $SINGULARITY_ENVIRONMENT
 
-    # FIXME libopencv-dev should not be installed here, ROS already brings its
-    # own, newer version of OpenCV.  Fix code so that ROS-version of OpenCV is
-    # used.
-    apt-get install -y \
-        freeglut3-dev \
-        ros-kinetic-realtime-tools \
-        python3-empy \
-        python3-yaml \
-        libcereal-dev \
-        libopencv-dev \
-        libxmu-dev \
-        libncurses5-dev \
-        libedit-dev
+    # FIXME this is supposed to work, why does it not?
+#%environment
+#    WORKSPACE=/ws
+#    RUN_SCRIPT=${WORKSPACE}/src/usercode/run
 
-    # upgrade pip
-    pip3 --no-cache-dir install --upgrade pip
-
-    # Need Python 3 version of several packages to build with Python 3
-    pip3 --no-cache-dir install catkin-pkg rospkg catkin_tools
-
-    # for building documentation
-    apt-get install doxygen
-    pip3 --no-cache-dir install doxypypy
-
-
-    # Tools for Debugging
-    # ===================
-
-    apt-get install -y gdb tmux less ipython3 python3-ipdb
-
-
-    # Run Dependencies
-    # ================
-
-    apt-get install -y \
-        python3-progressbar \
-        python3-matplotlib
-
-    # upgrade numpy (TODO: mention why this is needed)
-    pip3 --no-cache-dir install numpy --upgrade
-    pip3 --no-cache-dir install transformations
-
-
-    # for simulation
-    pip3 --no-cache-dir install pybullet gym
-
-    # for rl
-    apt-get install -y libopenmpi-dev zlib1g-dev
-    pip3 --no-cache-dir install tensorflow==1.14 pandas==0.24.2 mpi4py joblib
-    pip3 --no-cache-dir install opencv-contrib-python
-    pip3 --no-cache-dir install namegenerator
-
-    # Add robotpkg apt repository
-    tee /etc/apt/sources.list.d/robotpkg.list <<EOF
-deb [arch=amd64] http://robotpkg.openrobots.org/wip/packages/debian/pub $(lsb_release -sc) robotpkg
-deb [arch=amd64] http://robotpkg.openrobots.org/packages/debian/pub $(lsb_release -sc) robotpkg
-EOF
-    # Register the authentication certificate of robotpkg
-    curl http://robotpkg.openrobots.org/packages/debian/robotpkg.key | apt-key add -
-    apt-get update
-    # Note: for some reason, installation fails if the above packages are all
-    # combined in one `apt-get install` call.
-    apt-get install -y robotpkg-py35-pinocchio
-    apt-get install -y robotpkg-py35-crocoddyl
-    apt-get install -y robotpkg-gepetto-viewer
-    apt-get install -y robotpkg-py35-qt4-gepetto-viewer-corba
-
-    # clean up
-    apt-get clean
-
-    # create a setup file
-    echo ". /opt/ros/kinetic/setup.bash
-alias catmake='catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3'
-catbuild() { catkin build -DPYTHON_EXECUTABLE=/usr/bin/python3 \"\$@\"; }
-" > /setup.bash
-
-%environment
-    export PATH=/opt/openrobots/bin:$PATH
-    export PKG_CONFIG_PATH=/opt/openrobots/lib/pkgconfig:$PKG_CONFIG_PATH
-    export LD_LIBRARY_PATH=/opt/openrobots/lib:$LD_LIBRARY_PATH
-    export PYTHONPATH=/opt/openrobots/lib/python3.5/site-packages:$PYTHONPATH
-
-%labels
-    Version 0.9.3
-
-%help
-    Container for building the BLMC_EI project.
-    Run it with `singularity shell` at the root of your workspace, set up the
-    environment by executing `source /setup.sh` and build with `catbuild` (which
-    is an alias for `catkin build` that sets the Python executable to use Python
-    3) or `catmake` (same but using `catkin_make`).
+%runscript
+    # run something with environment set up
+    bash -c ". /setup.bash; $*"
