@@ -12,6 +12,12 @@ buildimage blmc_ei_base
 echo
 echo "=================================================="
 echo 
+echo "Build base image with Pylon"
+buildimage pylon
+
+echo
+echo "=================================================="
+echo 
 echo "Build BLMC_EI image"
 buildimage blmc_ei
 

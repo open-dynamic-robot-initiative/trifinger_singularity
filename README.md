@@ -23,6 +23,7 @@ additional functionality.
   don't need to be built manually.
 - *submission*:  Adds "apps" to build and run user code through the submission
   system.
+- *pylon*:  Adds Pylon SDK to blmc_ei_base.
 
 You can either build them manually using the build command shown above or run
 `build_all.sh` to build all of them at once.
@@ -86,9 +87,7 @@ to have treep installed locally and have access to all repositories of the
 BLMC_EI treep project.
 
 
-## Image "submission"
-
-### Building the Image
+### Image "submission"
 
 Extends blmc_ei, i.e. to build it you need to have `blmc_ei.sif` in your current
 working directory.
@@ -105,3 +104,12 @@ automated submission system.
 `/ws/src/usercode`:
 
     singularity run --app run --B local/ws/path:/ws challenge.sif
+
+
+### Image "pylon"
+
+Extends blmc_ei_base, i.e. to build it you need to have `blmc_ei_base.sif` in
+your current working directory.
+
+Installs Pylon SDK in the image.  This is kept separate due to potential license
+issues with Pylon.
