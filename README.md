@@ -7,15 +7,33 @@ Singularity definition files related to the BLMC EI project.
 To build a Singularity image from a given definition file, use the following
 command (you may need to adjust the file names according to your needs):
 
-    singularity build --fakeroot blmc_ei.sif blmc_ei.def
+    singularity build --fakeroot blmc_ei_base.sif blmc_ei_base.def
 
 The `--fakeroot` option enables building without `sudo`.
 
 
-## The BLMC_EI Image
+## Images in this Repository
 
-This image, defined in `blmc_ei.def`, provides the environment to build and run
-the code from the BLMC_EI treep project.
+This repository contains definition files for the following images.  They are
+based on each other, so usually one image just extends the previous one with
+additional functionality.
+
+- *blmc_ei_base*:  All dependencies to build/run the BLMC_EI project.
+- *blmc_ei*:  The BLMC_EI project packages are installed in this image, so they
+  don't need to be built manually.
+- *submission*:  Adds "apps" to build and run user code through the submission
+  system.
+
+You can either build them manually using the build command shown above or run
+`build_all.sh` to build all of them at once.
+
+Below follows a more detailed description of the separate images.
+
+
+### Image "blmc_ei_base"
+
+This image, defined in `blmc_ei_base.def`, provides the environment to build and
+run the code from the BLMC_EI treep project.
 
 Build it normally using the above command.
 
@@ -26,7 +44,7 @@ with flags set that are needed for building the BLMC_EI project.
 So to build the workspace and run things with the container do
 
     cd path/to/your_workspace
-    singularity shell --nv path/to/blmc_ei.sif
+    singularity shell --nv path/to/blmc_ei_base.sif
     . /setup.bash
     catbuild
 
@@ -35,9 +53,9 @@ So to build the workspace and run things with the container do
     rosrun your_package your_node
 
 
-### Known Issues
+#### Known Issues
 
-#### OpenCV with Python 3
+##### OpenCV with Python 3
 
 ROS brings it's own installation of `cv2` which gets added to `$PYTHONPATH` when
 sourcing `/setup.bash`.  This leads to an error when importing `cv2` in a Python
@@ -47,38 +65,36 @@ not needed for running things, only for building) or clear `$PYTHONPATH` using
     export PYTHONPATH=""
 
 
-## The Challenge Image
+### Image "blmc_ei"
+
+Extends blmc_ei_base, i.e. to build it you need to have `blmc_ei_base.sif` in
+your current working directory.
+
+Adds a compiled version of the BLMC_EI project workspace.  With this, users can
+run executables of the project or build their own code that depends on it,
+without having to build the BLMC_EI packages themselves.
+
+It adds a "runscript" to execute commands with set up environment.  Example:
+
+    ./blmc_ei.sif rosrun robot_fingers demo_fake_finger.py
+
+
+#### Requirements
+
+At build, the BLMC_EI project code is fetched using treep.  Therefore you need
+to have treep installed locally and have access to all repositories of the
+BLMC_EI treep project.
+
+
+## Image "submission"
 
 ### Building the Image
 
-The challenge image (defined in challenge_image.def) extends the "blmc_ei" image
-(see above) by adding a compiled version of the BLMC_EI project workspace.  With
-this, users can build and run their own code using our libraries without having
-to build them themselves.
+Extends blmc_ei, i.e. to build it you need to have `blmc_ei.sif` in your current
+working directory.
 
-Build Requirements:
-
-- You already have an image called `blmc_ei.sif`, based on `blmc_ei.def` (see
-  above).
-- You have treep installed locally and access to all repositories of the BLMC_EI
-  treep project.
-
-To build the image run the following (assuming that both `blmc_ei.sif` and
-`challenge_image.def` are in the current working directory).
-
-    singularity build --fakeroot challenge.sif challenge_image.def
-
-
-### Using the Image
-
-Same as the original blmc_ei image, with the difference that all packages of the
-BLMC_EI project are already installed inside.
-
-
-### Apps
-
-Apart from adding the BLMC_EI project code, this image defines two "apps"
-`build` and `run` which are meant for usage by the automated submission system.
+This image defines two "apps" `build` and `run` which are meant for usage by the
+automated submission system.
 
 `build` assumes that the user workspace is bound at `/ws` and simply runs
 `catbuild` there:
