@@ -1,12 +1,14 @@
 Bootstrap: docker
-From: osrf/ros:kinetic-desktop
+From: osrf/ros:melodic-desktop
 
 # To save time when rebuilding the image, you can pull the ROS image once and
 # then use the following instead:
 #Bootstrap: localimage
-#From: ./ros_kinetic-desktop.sif
+#From: ./ros_melodic-desktop.sif
 
 %post
+    ROS_DISTRO=melodic
+
     apt-get update
     apt-get dist-upgrade -y
 
@@ -20,7 +22,7 @@ From: osrf/ros:kinetic-desktop
     # used.
     apt-get install -y \
         freeglut3-dev \
-        ros-kinetic-realtime-tools \
+        ros-${ROS_DISTRO}-realtime-tools \
         python3-empy \
         python3-yaml \
         libcereal-dev \
@@ -33,10 +35,21 @@ From: osrf/ros:kinetic-desktop
     pip3 --no-cache-dir install --upgrade pip
 
     # Need Python 3 version of several packages to build with Python 3
-    pip3 --no-cache-dir install catkin-pkg rospkg catkin_tools
+    pip3 --no-cache-dir install catkin-pkg rospkg
+    #pip3 --no-cache-dir catkin_tools
+    # Install catkin_tools from source to get fix from
+    # https://github.com/catkin/catkin_tools/pull/574 (not yet in an official
+    # release)
+    # TODO: Remove this once catkin_tools 0.5.0 is released (see
+    # https://github.com/catkin/catkin_tools/issues/594)
+    pip3 --no-cache-dir install osrf-pycommon
+    git clone https://github.com/catkin/catkin_tools.git
+    cd catkin_tools
+    python3 setup.py install
+    cd ..
 
     # for building documentation
-    apt-get install doxygen
+    apt-get install -y doxygen
     pip3 --no-cache-dir install doxypypy
 
 
@@ -75,18 +88,18 @@ EOF
     # Register the authentication certificate of robotpkg
     curl http://robotpkg.openrobots.org/packages/debian/robotpkg.key | apt-key add -
     apt-get update
-    # Note: for some reason, installation fails if the above packages are all
+    # Note: for some reason, installation fails if the below packages are all
     # combined in one `apt-get install` call.
-    apt-get install -y robotpkg-py35-pinocchio
-    apt-get install -y robotpkg-py35-crocoddyl
-    apt-get install -y robotpkg-gepetto-viewer
-    apt-get install -y robotpkg-py35-qt4-gepetto-viewer-corba
+    apt-get install -y robotpkg-py36-pinocchio
+    apt-get install -y robotpkg-py36-crocoddyl
+    apt-get install -y robotpkg-py36-qt4-gepetto-viewer
+    apt-get install -y robotpkg-py36-qt4-gepetto-viewer-corba
 
     # clean up
     apt-get clean
 
     # create a setup file
-    echo ". /opt/ros/kinetic/setup.bash
+    echo ". /opt/ros/${ROS_DISTRO}/setup.bash
 alias catmake='catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3'
 catbuild() { catkin build -DPYTHON_EXECUTABLE=/usr/bin/python3 \"\$@\"; }
 " > /setup.bash
@@ -95,10 +108,10 @@ catbuild() { catkin build -DPYTHON_EXECUTABLE=/usr/bin/python3 \"\$@\"; }
     export PATH=/opt/openrobots/bin:$PATH
     export PKG_CONFIG_PATH=/opt/openrobots/lib/pkgconfig:$PKG_CONFIG_PATH
     export LD_LIBRARY_PATH=/opt/openrobots/lib:$LD_LIBRARY_PATH
-    export PYTHONPATH=/opt/openrobots/lib/python3.5/site-packages:$PYTHONPATH
+    export PYTHONPATH=/opt/openrobots/lib/python3.6/site-packages:$PYTHONPATH
 
 %labels
-    Version 0.9.3
+    Version 0.10.0
 
 %help
     Container for building the BLMC_EI project.

@@ -15,7 +15,7 @@ From: ./blmc_ei_base.sif
 
     # checkout the challenge tag to ensure fixed version of the code
     # TODO this tag actually needs to be created everywhere
-    treep --checkout-branch trifinger_challenge_v1.0.0
+    #treep --checkout-branch trifinger_challenge_v1.0.0
 
     # copy workspace into the image, omitting git information
     rsync -rl --exclude ".git" workspace/ ${SINGULARITY_ROOTFS}/opt/blmc_ei
