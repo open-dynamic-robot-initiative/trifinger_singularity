@@ -29,7 +29,8 @@ From: osrf/ros:melodic-desktop
         libopencv-dev \
         libxmu-dev \
         libncurses5-dev \
-        libedit-dev
+        libedit-dev \
+        libarmadillo-dev
 
     # upgrade pip
     pip3 --no-cache-dir install --upgrade pip
