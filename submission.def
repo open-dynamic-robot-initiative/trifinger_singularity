@@ -13,7 +13,7 @@ From: ./blmc_ei.sif
     `catbuild` there.
 
 %apprun run
-    bash -c ". /setup.bash; ${RUN_SCRIPT}"
+    bash -c ". /setup.bash; ${RUN_SCRIPT} $@"
 
 %apphelp run
 
