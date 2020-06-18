@@ -30,6 +30,7 @@ From: osrf/ros:melodic-desktop
         libxmu-dev \
         libncurses5-dev \
         libedit-dev \
+        libopenblas-dev \
         libarmadillo-dev
 
     # upgrade pip
