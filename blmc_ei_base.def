@@ -94,8 +94,9 @@ EOF
     # combined in one `apt-get install` call.
     apt-get install -y robotpkg-py36-pinocchio
     apt-get install -y robotpkg-py36-crocoddyl
-    apt-get install -y robotpkg-py36-qt4-gepetto-viewer
-    apt-get install -y robotpkg-py36-qt4-gepetto-viewer-corba
+    # TODO they fail to install.  Are they still needed? if not, just remove
+    #apt-get install -y robotpkg-py36-qt4-gepetto-viewer
+    #apt-get install -y robotpkg-py36-qt4-gepetto-viewer-corba
 
     # clean up
     apt-get clean
