@@ -3,29 +3,14 @@
 Bootstrap: localimage
 From: ./blmc_ei_base.sif
 
-%setup
-    # Clone the pylon repo on the host system because inside the container there
-    # is no access to the SSH key for gitlab.
-
-    tmp_dir=$(mktemp -d -t build_challenge_image-XXXXXXXXXX)
-    cd ${tmp_dir}
-
-    git clone git@gitlab.is.tue.mpg.de:robotics/pylon.git
-
-    # copy workspace into the image, omitting git information
-    rsync -rl --exclude ".git" pylon/ ${SINGULARITY_ROOTFS}/pylon
-
-    cd -
-    rm -rf ${tmp_dir}
+%files
+    # expect pylon to be available in the current working directory
+    pylon/pylon-5.2.0.13457-x86_64 /pylon
 
 %post
-    cd /pylon/pylon-5.2.0.13457-x86_64
+    cd /pylon
 
     sudo tar -C /opt -xzf pylonSDK*.tar.gz
-
-    # This script is interactive so it cannot be executed here.  Probably also
-    # not needed in the container, though.
-    #./setup-usb.sh
 
     cd /
     rm -rf /pylon
