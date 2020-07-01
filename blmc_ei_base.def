@@ -51,8 +51,8 @@ From: osrf/ros:melodic-desktop
     cd ..
 
     # for building documentation
-    apt-get install -y doxygen python3-sphinx
-    pip3 --no-cache-dir install doxypypy
+    apt-get install -y doxygen
+    pip3 --no-cache-dir install doxypypy sphinx
 
 
     # Tools for Debugging
