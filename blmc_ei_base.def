@@ -55,6 +55,12 @@ From: osrf/ros:melodic-desktop
     pip3 --no-cache-dir install doxypypy sphinx
 
 
+    # Tools for Testing
+    # =================
+
+    apt-get install -y python3-nose python3-rednose
+
+
     # Tools for Debugging
     # ===================
 
