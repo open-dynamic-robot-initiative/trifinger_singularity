@@ -11,6 +11,10 @@ command (you may need to adjust the file names according to your needs):
 
 The `--fakeroot` option enables building without `sudo`.
 
+There is also a Makefile in this repo, instead of the above, you can use
+
+    make blmc_ei_base.sif
+
 
 ## Images in this Repository
 
@@ -52,18 +56,6 @@ So to build the workspace and run things with the container do
     # source the workspace
     . devel/setup.bash
     rosrun your_package your_node
-
-
-#### Known Issues
-
-##### OpenCV with Python 3
-
-ROS brings it's own installation of `cv2` which gets added to `$PYTHONPATH` when
-sourcing `/setup.bash`.  This leads to an error when importing `cv2` in a Python
-3 script.  To work around this issue, don't source `/setup.bash` at all (it is
-not needed for running things, only for building) or clear `$PYTHONPATH` using
-
-    export PYTHONPATH=""
 
 
 ### Image "blmc_ei"
