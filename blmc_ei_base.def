@@ -72,21 +72,15 @@ From: osrf/ros:melodic-desktop
 
     apt-get install -y \
         python3-progressbar \
-        python3-matplotlib
+        python3-matplotlib \
+        python3-numpy
 
-    # upgrade numpy (TODO: mention why this is needed)
-    pip3 --no-cache-dir install numpy --upgrade
-    pip3 --no-cache-dir install transformations
-
+    pip3 --no-cache-dir install pandas==0.24.2
+    pip3 --no-cache-dir install opencv-contrib-python
+    pip3 --no-cache-dir install namegenerator
 
     # for simulation
     pip3 --no-cache-dir install pybullet gym
-
-    # for rl
-    apt-get install -y libopenmpi-dev zlib1g-dev
-    pip3 --no-cache-dir install tensorflow==1.14 pandas==0.24.2 mpi4py joblib
-    pip3 --no-cache-dir install opencv-contrib-python
-    pip3 --no-cache-dir install namegenerator
 
     # Add robotpkg apt repository
     tee /etc/apt/sources.list.d/robotpkg.list <<EOF
@@ -100,9 +94,6 @@ EOF
     # combined in one `apt-get install` call.
     apt-get install -y robotpkg-py36-pinocchio
     apt-get install -y robotpkg-py36-crocoddyl
-    # TODO they fail to install.  Are they still needed? if not, just remove
-    #apt-get install -y robotpkg-py36-qt4-gepetto-viewer
-    #apt-get install -y robotpkg-py36-qt4-gepetto-viewer-corba
 
     # clean up
     apt-get clean
