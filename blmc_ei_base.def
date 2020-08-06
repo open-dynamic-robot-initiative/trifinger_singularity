@@ -74,16 +74,13 @@ From: osrf/ros:melodic-desktop
         python3-progressbar \
         python3-matplotlib
 
-    # upgrade numpy (TODO: mention why this is needed)
+    # upgrade numpy (needed for pybullet)
     pip3 --no-cache-dir install numpy --upgrade
-
-
-    # for simulation
     pip3 --no-cache-dir install pybullet gym
 
-    # for rl
     apt-get install -y libopenmpi-dev zlib1g-dev
-    pip3 --no-cache-dir install tensorflow==1.14 pandas==0.24.2 mpi4py joblib
+    pip3 --no-cache-dir install stable-baselines==2.10.0
+    pip3 --no-cache-dir install tensorflow==1.14 pandas==0.24.2 joblib
     pip3 --no-cache-dir install opencv-contrib-python
     pip3 --no-cache-dir install namegenerator
 
