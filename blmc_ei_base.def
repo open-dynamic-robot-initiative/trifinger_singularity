@@ -73,9 +73,7 @@ From: osrf/ros:melodic-desktop
     apt-get install -y \
         python3-progressbar \
         python3-matplotlib \
-
-    # upgrade numpy (seems to be needed by pybullet)
-    pip3 --no-cache-dir install numpy==1.19.1
+        python3-numpy
 
     pip3 --no-cache-dir install pandas==0.24.2
     pip3 --no-cache-dir install opencv-contrib-python
