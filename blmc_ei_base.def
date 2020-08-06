@@ -76,7 +76,6 @@ From: osrf/ros:melodic-desktop
 
     # upgrade numpy (TODO: mention why this is needed)
     pip3 --no-cache-dir install numpy --upgrade
-    pip3 --no-cache-dir install transformations
 
 
     # for simulation
@@ -100,9 +99,6 @@ EOF
     # combined in one `apt-get install` call.
     apt-get install -y robotpkg-py36-pinocchio
     apt-get install -y robotpkg-py36-crocoddyl
-    # TODO they fail to install.  Are they still needed? if not, just remove
-    #apt-get install -y robotpkg-py36-qt4-gepetto-viewer
-    #apt-get install -y robotpkg-py36-qt4-gepetto-viewer-corba
 
     # clean up
     apt-get clean
