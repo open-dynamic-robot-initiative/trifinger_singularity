@@ -52,7 +52,14 @@ From: osrf/ros:melodic-desktop
 
     # for building documentation
     apt-get install -y doxygen
-    pip3 --no-cache-dir install doxypypy sphinx
+    pip3 --no-cache-dir install \
+        doxypypy \
+        sphinx \
+        m2r \
+        recommonmark \
+        breathe \
+        sphinxcontrib-moderncmakedomain \
+        sphinx-rtd-theme
 
 
     # Tools for Testing
