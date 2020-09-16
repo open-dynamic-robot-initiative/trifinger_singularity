@@ -71,7 +71,7 @@ From: osrf/ros:melodic-desktop
     # Tools for Debugging
     # ===================
 
-    apt-get install -y gdb tmux less ipython3 python3-ipdb
+    apt-get install -y gdb valgrind tmux less ipython3 python3-ipdb
 
 
     # Run Dependencies
