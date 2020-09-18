@@ -31,7 +31,8 @@ From: osrf/ros:melodic-desktop
         libncurses5-dev \
         libedit-dev \
         libopenblas-dev \
-        libarmadillo-dev
+        libarmadillo-dev \
+        libdlib-dev
 
     # upgrade pip
     pip3 --no-cache-dir install --upgrade pip
