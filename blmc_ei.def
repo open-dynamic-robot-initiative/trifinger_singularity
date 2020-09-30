@@ -11,7 +11,7 @@ From: ./blmc_ei_base.sif
 
     git clone git@gitlab.is.tue.mpg.de:robotics/treep_robotics.git
     git clone git@github.com:machines-in-motion/treep_machines_in_motion.git
-    treep --seq-clone BLMC_EI
+    treep --clone BLMC_EI
 
     # checkout the challenge tag to ensure fixed version of the code
     # TODO this tag actually needs to be created everywhere
@@ -26,6 +26,10 @@ From: ./blmc_ei_base.sif
 %post
     NOW=`date`
     echo "export IMAGE_BUILD_DATE=\"${NOW}\"" >> $SINGULARITY_ENVIRONMENT
+
+    # add rrc_simulation to the workspace
+    cd /opt/blmc_ei/src
+    git clone https://github.com/rr-learning/rrc_simulation.git
 
     cd /opt/blmc_ei
     bash -c ". /setup.bash; catbuild"
