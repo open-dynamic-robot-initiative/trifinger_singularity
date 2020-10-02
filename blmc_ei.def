@@ -32,7 +32,7 @@ From: ./blmc_ei_base.sif
     git clone https://github.com/rr-learning/rrc_simulation.git
 
     cd /opt/blmc_ei
-    bash -c ". /setup.bash; catbuild"
+    bash -c ". /setup.bash; catbuild -DCMAKE_BULID_TYPE=Release"
     echo ". /opt/blmc_ei/devel/setup.bash" >> /setup.bash
 
     # %environment does not seem to work when bootstrapping localimage...
