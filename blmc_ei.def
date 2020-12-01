@@ -28,17 +28,9 @@ From: ./blmc_ei_base.sif
     git clone https://github.com/rr-learning/rrc_simulation.git
 
     cd /opt/blmc_ei
-    bash -c ". /setup.bash; catbuild"
-    echo ". /opt/blmc_ei/devel/setup.bash" >> /setup.bash
+    bash -c ". /setup.bash; colcon build"
+    echo ". /opt/blmc_ei/install/setup.bash" >> /setup.bash
 
-    # %environment does not seem to work when bootstrapping localimage...
-    echo "export WORKSPACE=/ws" >> $SINGULARITY_ENVIRONMENT
-    echo "export RUN_SCRIPT=/ws/src/usercode/run" >> $SINGULARITY_ENVIRONMENT
-
-    # FIXME this is supposed to work, why does it not?
-#%environment
-#    WORKSPACE=/ws
-#    RUN_SCRIPT=${WORKSPACE}/src/usercode/run
 
 %runscript
     # run something with environment set up
