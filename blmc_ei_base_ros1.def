@@ -1,13 +1,13 @@
 Bootstrap: docker
-From: ros:dashing-ros-base
+From: osrf/ros:melodic-desktop
 
 # To save time when rebuilding the image, you can pull the ROS image once and
 # then use the following instead:
 #Bootstrap: localimage
-#From: ./ros_dashing-ros-base.sif
+#From: ./ros_melodic-desktop.sif
 
 %post
-    ROS_DISTRO=dashing
+    ROS_DISTRO=melodic
 
     apt-get update
     apt-get dist-upgrade -y
@@ -15,27 +15,40 @@ From: ros:dashing-ros-base
     # Build Dependencies
     # ==================
 
-    apt-get install -y clang clang-format wget python3-pip curl
+    apt-get install -y clang clang-format wget python3-pip curl python3-colcon-common-extensions
 
+    # FIXME libopencv-dev should not be installed here, ROS already brings its
+    # own, newer version of OpenCV.  Fix code so that ROS-version of OpenCV is
+    # used.
     apt-get install -y \
         freeglut3-dev \
-        graphviz \
-        libarmadillo-dev \
-        libcereal-dev \
-        libedit-dev \
-        libncurses5-dev \
-        libopenblas-dev \
-        libopencv-dev \
-        libxmu-dev \
-        libyaml-cpp-dev \
+        ros-${ROS_DISTRO}-realtime-tools \
         python3-empy \
         python3-yaml \
-        ros-${ROS_DISTRO}-ament-cmake-nose \
-        ros-${ROS_DISTRO}-xacro \
-        ros-${ROS_DISTRO}-yaml-cpp-vendor
+        libcereal-dev \
+        libopencv-dev \
+        libxmu-dev \
+        libncurses5-dev \
+        libedit-dev \
+        libopenblas-dev \
+        libarmadillo-dev
 
     # upgrade pip
     pip3 --no-cache-dir install --upgrade pip
+
+    # Need Python 3 version of several packages to build with Python 3
+    pip3 --no-cache-dir install catkin-pkg rospkg
+    #pip3 --no-cache-dir catkin_tools
+    # Install catkin_tools from source to get fix from
+    # https://github.com/catkin/catkin_tools/pull/574 (not yet in an official
+    # release)
+    # TODO: Remove this once catkin_tools 0.5.0 is released (see
+    # https://github.com/catkin/catkin_tools/issues/594)
+    pip3 --no-cache-dir install osrf-pycommon
+    git clone https://github.com/catkin/catkin_tools.git
+    cd catkin_tools
+    python3 setup.py install
+    cd ..
 
     # for building documentation
     apt-get install -y doxygen
@@ -95,7 +108,10 @@ EOF
     apt-get clean
 
     # create a setup file
-    echo ". /opt/ros/${ROS_DISTRO}/setup.bash" > /setup.bash
+    echo ". /opt/ros/${ROS_DISTRO}/setup.bash
+alias catmake='catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python3'
+catbuild() { catkin build -DPYTHON_EXECUTABLE=/usr/bin/python3 \"\$@\"; }
+" > /setup.bash
 
 %environment
     export PATH=/opt/openrobots/bin:$PATH
@@ -104,9 +120,11 @@ EOF
     export PYTHONPATH=/opt/openrobots/lib/python3.6/site-packages:$PYTHONPATH
 
 %labels
-    Version 1.0.0
+    Version 0.10.0
 
 %help
-    Container for building the BLMC_EI/ROBOT_FINGER project.
+    Container for building the BLMC_EI project.
     Run it with `singularity shell` at the root of your workspace, set up the
-    environment by executing `source /setup.sh` and build with `colcon build`.
+    environment by executing `source /setup.sh` and build with `catbuild` (which
+    is an alias for `catkin build` that sets the Python executable to use Python
+    3) or `catmake` (same but using `catkin_make`).
