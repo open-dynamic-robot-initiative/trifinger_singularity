@@ -9,9 +9,9 @@ From: ./blmc_ei_base.sif
 
     echo "Create workspace in ${ws_tmp_dir}"
 
-    git clone -b real_robot_challenge git@gitlab.is.tue.mpg.de:robotics/treep_robotics.git
-    git clone -b real_robot_challenge git@github.com:machines-in-motion/treep_machines_in_motion.git
-    treep --clone BLMC_EI
+    #git clone git@gitlab.is.tue.mpg.de:robotics/treep_robotics.git
+    git clone git@github.com:machines-in-motion/treep_machines_in_motion.git
+    treep --clone ROBOT_FINGERS
 
     # copy workspace into the image, omitting git information
     rsync -rl --exclude ".git" workspace/ ${SINGULARITY_ROOTFS}/opt/blmc_ei
@@ -23,13 +23,9 @@ From: ./blmc_ei_base.sif
     NOW=`date`
     echo "export IMAGE_BUILD_DATE=\"${NOW}\"" >> $SINGULARITY_ENVIRONMENT
 
-    # add rrc_simulation to the workspace
-    cd /opt/blmc_ei/src
-    git clone https://github.com/rr-learning/rrc_simulation.git
-
     cd /opt/blmc_ei
     bash -c ". /setup.bash; colcon build"
-    echo ". /opt/blmc_ei/install/setup.bash" >> /setup.bash
+    echo ". /opt/blmc_ei/install/local_setup.bash" >> /setup.bash
 
 
 %runscript
