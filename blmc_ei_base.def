@@ -95,7 +95,10 @@ EOF
     apt-get clean
 
     # create a setup file
-    echo ". /opt/ros/${ROS_DISTRO}/setup.bash" > /setup.bash
+    echo ". /opt/ros/${ROS_DISTRO}/setup.bash
+source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash
+source /usr/share/colcon_cd/function/colcon_cd.sh
+" > /setup.bash
 
 %environment
     export PATH=/opt/openrobots/bin:$PATH
