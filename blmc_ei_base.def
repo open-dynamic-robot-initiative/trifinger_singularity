@@ -61,7 +61,14 @@ From: ros:dashing-ros-base
     # Tools for Debugging
     # ===================
 
-    apt-get install -y gdb valgrind tmux less ipython3 python3-ipdb
+    apt-get install -y \
+        gdb \
+        valgrind \
+        tmux \
+        less \
+        ipython3 \
+        python3-ipdb \
+        python3-psutil
 
 
     # Run Dependencies
