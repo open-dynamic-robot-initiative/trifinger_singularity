@@ -48,6 +48,9 @@ From: ros:dashing-ros-base
         sphinxcontrib-moderncmakedomain \
         sphinx-rtd-theme
 
+    # for code formatting
+    pip3 --no-cache-dir install black cmakelang
+
 
     # Tools for Testing
     # =================
