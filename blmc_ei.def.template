@@ -1,7 +1,7 @@
 # Install the BLMC_EI project software in the image so it can be used without
 # building
 Bootstrap: localimage
-From: ./blmc_ei_base.sif
+From: %BASE_IMAGE%
 
 %setup
     ws_tmp_dir=$(mktemp -d -t build_challenge_image-XXXXXXXXXX)
@@ -24,7 +24,7 @@ From: ./blmc_ei_base.sif
     echo "export IMAGE_BUILD_DATE=\"${NOW}\"" >> $SINGULARITY_ENVIRONMENT
 
     cd /opt/blmc_ei
-    bash -c ". /setup.bash; colcon build"
+    bash -c ". /setup.bash; colcon build %BUILD_OPTIONS%"
     echo ". /opt/blmc_ei/install/local_setup.bash" >> /setup.bash
 
 
