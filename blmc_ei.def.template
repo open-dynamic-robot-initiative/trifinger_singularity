@@ -3,21 +3,8 @@
 Bootstrap: localimage
 From: %BASE_IMAGE%
 
-%setup
-    ws_tmp_dir=$(mktemp -d -t build_challenge_image-XXXXXXXXXX)
-    cd ${ws_tmp_dir}
-
-    echo "Create workspace in ${ws_tmp_dir}"
-
-    #git clone git@gitlab.is.tue.mpg.de:robotics/treep_robotics.git
-    git clone git@github.com:machines-in-motion/treep_machines_in_motion.git
-    treep --clone ROBOT_FINGERS
-
-    # copy workspace into the image, omitting git information
-    rsync -rl --exclude ".git" workspace/ ${SINGULARITY_ROOTFS}/opt/blmc_ei
-
-    cd -
-    rm -rf ${ws_tmp_dir}
+%files
+    workspace/workspace /opt/blmc_ei
 
 %post
     NOW=`date`
@@ -27,6 +14,8 @@ From: %BASE_IMAGE%
     bash -c ". /setup.bash; colcon build %BUILD_OPTIONS%"
     echo ". /opt/blmc_ei/install/local_setup.bash" >> /setup.bash
 
+    # cleanup build and source files to reduce image size
+    rm -rf build src log
 
 %runscript
     # run something with environment set up

@@ -1,3 +1,4 @@
 *.sif
 blmc_ei_robot.def
 blmc_ei_user.def
+workspace/
