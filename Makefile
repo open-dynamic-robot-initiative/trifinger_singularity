@@ -1,7 +1,7 @@
 sifs = blmc_ei_base.sif pylon.sif blmc_ei_user.sif blmc_ei_robot.sif
 
 .PHONY: all
-all: sifs
+all: $(sifs)
 
 workspace:
 	@echo "Clone workspace to './workspace'"
@@ -18,7 +18,7 @@ clean:
 
 .PHONY: clean_sif
 clean_sif:
-	rm $(sifs)
+	rm -f $(sifs)
 
 
 # Regarding the structure of this Makefile:
