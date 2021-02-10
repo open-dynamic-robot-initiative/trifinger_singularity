@@ -1,7 +1,7 @@
 # Install latest CMake version to /opt/cmake (so it does not interfere with the
 # system installation).
 Bootstrap: localimage
-From: ./blmc_ei_base.sif
+From: ./trifinger_base.sif
 
 %post
     mkdir /src

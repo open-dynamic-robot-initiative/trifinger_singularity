@@ -1,4 +1,4 @@
 *.sif
-blmc_ei_robot.def
-blmc_ei_user.def
+trifinger_robot.def
+trifinger_user.def
 workspace/

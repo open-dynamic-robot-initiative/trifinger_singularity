@@ -1,7 +1,7 @@
 # Add Pylon SDK to the image
 # This is not included in the original image due to possible license issues.
 Bootstrap: localimage
-From: ./blmc_ei_base.sif
+From: ./trifinger_base.sif
 
 %files
     # expect pylon to be available in the current working directory

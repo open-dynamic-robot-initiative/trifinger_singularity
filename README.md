@@ -40,24 +40,24 @@ This repository contains definition files for the following images.  They are
 based on each other, so usually one image just extends the previous one with
 additional functionality.
 
-- *blmc_ei_base*:  All dependencies to build/run the ROBOT_FINGERS project.
-- *pylon*:  Adds Pylon SDK to blmc_ei_base.
-- *blmc_ei_user*:  The `ROBOT_FINGERS` project packages are installed in this
+- *trifinger_base*:  All dependencies to build/run the ROBOT_FINGERS project.
+- *trifinger_base_pylon*:  Adds Pylon SDK to trifinger_base.
+- *trifinger_user*:  The `ROBOT_FINGERS` project packages are installed in this
   image, so they don't need to be built manually.
-- *blmc_ei_robot*:  Same as *blmc_ei_user* but with Pylon and using a
+- *trifinger_robot*:  Same as *trifinger_user* but with Pylon and using a
   "preempt_rt" build.  This image is for running the software on the actual
   robot.
 
 Below follows a more detailed description of the separate images.
 
 
-### Image "blmc_ei_base"
+### Image "trifinger_base"
 
 Build with:
 
-    make blmc_ei_base.sif
+    make trifinger_base.sif
 
-This image, defined in `blmc_ei_base.def`, provides the environment to build and
+This image, defined in `trifinger_base.def`, provides the environment to build and
 run the code from the `ROBOT_FINGERS` treep project.
 
 Inside the container is a file `/setup.bash` which needs to be sourced to set up
@@ -66,7 +66,7 @@ the environment for building/running the code.
 So to build the workspace and run things with the container do
 
     cd path/to/your_workspace
-    singularity shell --nv path/to/blmc_ei_base.sif
+    singularity shell --nv path/to/trifinger_base.sif
     . /setup.bash
     colcon build
 
@@ -75,11 +75,11 @@ So to build the workspace and run things with the container do
     ros2 run <package_name> <executable_name>
 
 
-### Image "pylon"
+### Image "trifinger_base_pylon"
 
 Build with:
 
-    make pylon.sif
+    make trifinger_base_pylon.sif
 
 Adds the Pylon SDK to the base image.  Needed for building the camera drivers
 for the TriFinger robots.
@@ -88,16 +88,16 @@ This is kept separate from the base image due to potential license issues with
 Pylon.
 
 
-### Images "blmc_ei_user"/"blmc_ei_robot"
+### Images "trifinger_user"/"trifinger_robot"
 
 Build with:
 
-    make blmc_ei_user.sif
-    make blmc_ei_robot.sif
+    make trifinger_user.sif
+    make trifinger_robot.sif
 
-Both images are based on the same definition template `blmc_ei.def.template` and
-extend the base image by adding a pre-built `ROBOT_FINGERS` workspace.  This is
-meant for users of the robot who want to run applications from the robot
+Both images are based on the same definition template `trifinger.def.template`
+and extend the base image by adding a pre-built `ROBOT_FINGERS` workspace.  This
+is meant for users of the robot who want to run applications from the robot
 packages or build their own applications depending on them but who do not need
 to modify the core packages.
 
