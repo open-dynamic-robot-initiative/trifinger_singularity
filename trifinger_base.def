@@ -21,6 +21,7 @@ From: ros:foxy-ros-base
         freeglut3-dev \
         graphviz \
         libarmadillo-dev \
+        libboost-iostreams-dev \
         libcereal-dev \
         libedit-dev \
         libncurses5-dev \
