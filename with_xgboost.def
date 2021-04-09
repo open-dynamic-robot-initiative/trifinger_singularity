@@ -1,31 +1,10 @@
-# Add Pylon SDK to the image
-# This is not included in the original image due to possible license issues.
+# Add XGBoost to the image
 Bootstrap: localimage
-From: ./cmake3-18.sif
+From: ./trifinger_base.sif
 
 %post
     # dependencies
     apt-get install -y python3-sklearn
 
-    mkdir /src
-    cd /src
-
-    # Now install xgboost, using the "opt"-version of cmake
-    cd /src
-    git clone https://github.com/dmlc/xgboost
-    cd xgboost
-    git checkout v1.2.0
-    git submodule update --init
-
-    mkdir build
-    cd build
-    /opt/cmake/bin/cmake ..
-    make -j$(nproc)
-    make install
-
-    # install the python package
-    cd ../python-package
-    python3 setup.py install
-
-    cd /
-    rm -rf /src
+    #pip3 install xgboost==1.2.0
+    pip3 install xgboost==1.3.3
