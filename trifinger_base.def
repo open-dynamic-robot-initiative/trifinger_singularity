@@ -17,11 +17,17 @@ From: ros:foxy-ros-base
 
     apt-get install -y clang clang-format wget python3-pip curl
 
+    # upgrade pip to latest version (>=21 is needed)
+    python3 -m pip install --upgrade pip
+    python3 -m pip --version
+
     apt-get install -y \
         freeglut3-dev \
         graphviz \
         libarmadillo-dev \
         libboost-iostreams-dev \
+        libboost-filesystem-dev \
+        libboost-thread-dev \
         libcereal-dev \
         libedit-dev \
         libncurses5-dev \
@@ -34,12 +40,9 @@ From: ros:foxy-ros-base
         ros-${ROS_DISTRO}-xacro \
         ros-${ROS_DISTRO}-yaml-cpp-vendor
 
-    # upgrade pip
-    pip3 --no-cache-dir install --upgrade pip
-
     # for building documentation
     apt-get install -y doxygen
-    pip3 --no-cache-dir install \
+    python3 -m pip install \
         doxypypy \
         sphinx \
         m2r \
@@ -49,7 +52,7 @@ From: ros:foxy-ros-base
         sphinx-rtd-theme
 
     # for code formatting
-    pip3 --no-cache-dir install black cmakelang
+    python3 -m pip install black cmakelang
 
 
     # Tools for Debugging
@@ -71,32 +74,29 @@ From: ros:foxy-ros-base
     apt-get install -y \
         python3-empy \
         python3-matplotlib \
-        python3-numpy \
         python3-opencv \
         python3-pandas \
         python3-progressbar \
         python3-yaml
 
+    # newer numpy version is needed for pinocchio
+    python3 -m pip install numpy==1.20.3
+
     # we unfortunately need a newer version of scipy for the Rotation class
-    pip3 --no-cache-dir install scipy==1.5.4
+    python3 -m pip install scipy==1.5.4
 
-    pip3 --no-cache-dir install pybullet==3.0.8
-    pip3 --no-cache-dir install gym==0.18.0
-    pip3 --no-cache-dir install namegenerator
+    python3 -m pip install pybullet==3.0.8
+    python3 -m pip install gym==0.18.0
+    python3 -m pip install namegenerator
 
-    # Add robotpkg apt repository
-    # deb [arch=amd64] http://robotpkg.openrobots.org/wip/packages/debian/pub $(lsb_release -sc) robotpkg
-    tee /etc/apt/sources.list.d/robotpkg.list <<EOF
-deb [arch=amd64] http://robotpkg.openrobots.org/packages/debian/pub $(lsb_release -sc) robotpkg
-EOF
-    # Register the authentication certificate of robotpkg
-    curl http://robotpkg.openrobots.org/packages/debian/robotpkg.key | apt-key add -
-    apt-get update
-    apt-get install -y robotpkg-py38-pinocchio
+    # pin == pinocchio
+    python3 -m pip install pin==2.6.0
 
 
     # clean up
     apt-get clean
+    pip cache purge
+
 
     # create a setup file
     echo ". /opt/ros/${ROS_DISTRO}/setup.bash
@@ -104,14 +104,10 @@ source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash
 source /usr/share/colcon_cd/function/colcon_cd.sh
 " > /setup.bash
 
-%environment
-    export PATH=/opt/openrobots/bin:$PATH
-    export PKG_CONFIG_PATH=/opt/openrobots/lib/pkgconfig:$PKG_CONFIG_PATH
-    export LD_LIBRARY_PATH=/opt/openrobots/lib:$LD_LIBRARY_PATH
-    export PYTHONPATH=/opt/openrobots/lib/python3.8/site-packages:$PYTHONPATH
 
 %labels
-    Version 2.0.0
+    Version 2.0.1
+
 
 %help
     Container for building the BLMC_EI/ROBOT_FINGER project.
