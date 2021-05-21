@@ -42,9 +42,11 @@ From: ros:foxy-ros-base
 
     # for building documentation
     apt-get install -y doxygen
+    # use sphinx 3.x as with 4.x there is some markup issue with Python API
+    # documentation
     python3 -m pip install \
         doxypypy \
-        sphinx \
+        sphinx==3.5.4 \
         m2r \
         recommonmark \
         breathe \
