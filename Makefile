@@ -7,7 +7,7 @@ workspace:
 	@echo "Clone workspace to './workspace'"
 	mkdir workspace
 	cd workspace; \
-		git clone git@github.com:machines-in-motion/treep_machines_in_motion.git; \
+		git clone git@github.com:machines-in-motion/treep_machines_in_motion.git --branch real_robot_challenge_2021; \
 		treep --clone ROBOT_FINGERS
 
 .PHONY: clean
