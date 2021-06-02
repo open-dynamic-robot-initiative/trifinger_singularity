@@ -81,11 +81,11 @@ Build with:
 
     make trifinger_base_pylon.sif
 
-Adds the Pylon SDK to the base image.  Needed for building the camera drivers
-for the TriFinger robots.
+Adds the Pylon SDK to the base image.  This is needed for building the camera
+drivers for the TriFinger robots.
 
-This is kept separate from the base image due to potential license issues with
-Pylon.
+The license of Pylon can be found in `/opt/pylon5/share/pylon/License.html`
+inside this image.  You may only use it if you accept its license.
 
 
 ### Images "trifinger_user"/"trifinger_robot"
