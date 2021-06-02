@@ -2,19 +2,28 @@
 
 Singularity definition files related to the TriFinger project.
 
-Maintainer:  Felix Widmaier (felix.widmaier@tue.mpg.de)
 
-Bamboo Build: [MPI - IS - Robotics/BLMC_EI Singularity](https://atlas.is.localnet/bamboo/browse/MGC-BS)
+## Requirements
 
-Built images can be [downloaded here](https://code.is.localnet/series/23/33/)
-(scroll to the bottom for the latest revision).
+For building the base images only a recent version of
+[Singularity](https://singularity.hpcng.org) and an internet connection is
+required.
+
+For building the images containing the TriFinger software (*trifinger_user* and
+*trifinger_robot*) the following applications are required in addition:
+
+- git
+- [treep](https://pypi.org/project/treep/)
+
+Further you will need a GitHub account with an SSH key set up, otherwise cloning
+the repositories via `treep` will not work.
 
 
 ## General: Building Images
 
-To build a specific image (let's say `foobar.sif`), simply call:
+To build a specific image (let's say `trifinger_base.sif`), simply call:
 
-    make foobar.sif
+    make trifinger_base.sif
 
 Note that for some images, `treep` is used to clone the TriFinger packages.
 This requires that a SSH key is set up for git and activated (e.g. via
@@ -111,9 +120,3 @@ When building, the project source is cloned to the directory `./workspace` and
 copied from there to the image.  Note that once cloned, the local workspace is
 not updated automatically when rebuilding the image!  To make sure you have the
 latest version of the code, run `make clean` first.
-
-#### Requirements
-
-At build time, the ROBOT_FINGERS project code is fetched using treep.  Therefore
-you need to have treep installed locally.  Further, an SSH key with access to
-all repositories as the be set up and activated.
