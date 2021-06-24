@@ -90,6 +90,7 @@ From: ros:foxy-ros-base
     python3 -m pip install pybullet==3.0.8
     python3 -m pip install gym==0.18.0
     python3 -m pip install namegenerator
+    python3 -m pip install zarr==2.8.3
 
     # pin == pinocchio
     python3 -m pip install pin==2.6.0
