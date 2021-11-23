@@ -67,7 +67,8 @@ From: ros:foxy-ros-base
         less \
         ipython3 \
         python3-ipdb \
-        python3-psutil
+        python3-psutil \
+        python3-venv
 
 
     # Run Dependencies
