@@ -46,9 +46,11 @@ From: ros:foxy-ros-base
     apt-get install -y doxygen
     # use sphinx 3.x as with 4.x there is some markup issue with Python API
     # documentation
+    # Pin mistune to 1.x (see github.com/Azure/azure-sdk-for-python/issues/22019)
     python3 -m pip install \
         doxypypy \
         sphinx==3.5.4 \
+        'mistune<2.0.0' \
         m2r \
         recommonmark \
         breathe \
