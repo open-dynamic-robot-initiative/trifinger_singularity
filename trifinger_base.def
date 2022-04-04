@@ -28,8 +28,10 @@ From: ros:foxy-ros-base
         libboost-iostreams-dev \
         libboost-filesystem-dev \
         libboost-thread-dev \
+        libboost-program-options-dev \
         libcereal-dev \
         libedit-dev \
+        libfmt-dev \
         libncurses5-dev \
         libopenblas-dev \
         libopencv-dev \
