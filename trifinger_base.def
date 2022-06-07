@@ -44,8 +44,6 @@ From: ros:foxy-ros-base
 
     # for building documentation
     apt-get install -y doxygen
-    # Use sphinx 3.x as with 4.x there is some markup issue with Python API
-    # documentation.
     # Pin mistune to 1.x (see github.com/Azure/azure-sdk-for-python/issues/22019)
     python3 -m pip install \
         doxypypy \
@@ -93,7 +91,7 @@ From: ros:foxy-ros-base
     python3 -m pip install scipy==1.5.4
 
     python3 -m pip install pybullet==3.0.8
-    python3 -m pip install gym==0.18.0
+    python3 -m pip install gym==0.23.1
     python3 -m pip install namegenerator
     python3 -m pip install zarr==2.8.3
 
