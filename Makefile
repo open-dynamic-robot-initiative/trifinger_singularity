@@ -1,5 +1,7 @@
 sifs = trifinger_base.sif trifinger_base_pylon.sif trifinger_user.sif trifinger_robot.sif
 
+USE_SUDO = 0
+
 .PHONY: all
 all: $(sifs)
 
@@ -41,4 +43,8 @@ trifinger_robot.def: trifinger.def.template trifinger_base_pylon.sif workspace
 
 # build arbitrary def file
 %.sif: %.def
+ifeq ($(USE_SUDO),1)
+	sudo singularity build $@ $<
+else
 	singularity build --fakeroot $@ $<
+endif
