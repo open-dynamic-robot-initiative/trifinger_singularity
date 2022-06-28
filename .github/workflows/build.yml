@@ -1,0 +1,57 @@
+# Build Apptainer images and push them to the GitHub Container Registry of the
+# repository.
+#
+# Runs automatically on pushes to master if they modify a def file and can also
+# be executed manually ("workflow_dispatch" event).
+# Images from the master branch are pushed with the "latest" tag, others with
+# the name of the branch.
+#
+name: Apptainer Build & Deploy
+on: 
+  push:
+    branches:
+      - master
+    paths:
+      - "*.def"
+  workflow_dispatch:
+
+jobs:
+    build:
+        name: Build
+        runs-on: ubuntu-20.04
+        steps:
+            - name: Install Apptainer
+              run: |
+                wget https://github.com/apptainer/apptainer/releases/download/v1.0.2/apptainer_1.0.2_amd64.deb
+                sudo apt-get install ./apptainer_1.0.2_amd64.deb
+
+            - name: Check out code for the container build
+              uses: actions/checkout@v2
+
+            - name: Install treep
+              run: |
+                python3 -m pip install treep
+
+            - name: Build trifinger_base.sif
+              run: make trifinger_base.sif USE_SUDO=1
+
+            - name: Build trifinger_user.sif
+              run: make trifinger_user.sif USE_SUDO=1
+
+            - name: Build trifinger_robot.sif
+              run: make trifinger_robot.sif USE_SUDO=1
+
+            - name: Login and Deploy Container
+              run: |
+                if [ "${GITHUB_REF_NAME}" = "master" ]
+                then
+                  tag=latest
+                else
+                  tag=${GITHUB_REF_NAME}
+                fi
+
+                echo ${{ secrets.GITHUB_TOKEN }} | apptainer remote login -u ${{ secrets.GHCR_USERNAME }} --password-stdin oras://ghcr.io
+
+                apptainer push trifinger_base.sif oras://ghcr.io/${GITHUB_REPOSITORY}/trifinger_base:${tag}
+                apptainer push trifinger_user.sif oras://ghcr.io/${GITHUB_REPOSITORY}/trifinger_user:${tag}
+                apptainer push trifinger_robot.sif oras://ghcr.io/${GITHUB_REPOSITORY}/trifinger_robot:${tag}
