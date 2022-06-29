@@ -9,7 +9,7 @@ workspace:
 	@echo "Clone workspace to './workspace'"
 	mkdir workspace
 	cd workspace; \
-		git clone https://github.com/machines-in-motion/treep_machines_in_motion.git; \
+		git clone https://github.com/machines-in-motion/treep_machines_in_motion.git -b real_robot_challenge_2022; \
 		treep --clone-https ROBOT_FINGERS
 
 .PHONY: clean

@@ -6,7 +6,7 @@ From: %BASE_IMAGE%
 %files
     workspace/workspace /opt/blmc_ei
 
-%post
+%post -c /bin/bash
     NOW=`date`
     echo "export IMAGE_BUILD_DATE=\"${NOW}\"" >> $SINGULARITY_ENVIRONMENT
 
@@ -14,8 +14,14 @@ From: %BASE_IMAGE%
     bash -c ". /setup.bash; colcon build %BUILD_OPTIONS%"
     echo ". /opt/blmc_ei/install/local_setup.bash" >> /setup.bash
 
+    # activate the workspace before installing rrc_2022_datasets, so
+    # dependencies can be found
+    . /setup.bash
+    python3 -m pip install git+https://github.com/rr-learning/rrc_2022_datasets.git@v1.0.0
+
     # cleanup build and source files to reduce image size
     rm -rf build src log
+    pip cache purge
 
 %runscript
     # run something with environment set up
