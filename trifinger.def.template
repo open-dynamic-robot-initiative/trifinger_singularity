@@ -17,7 +17,7 @@ From: %BASE_IMAGE%
     # activate the workspace before installing rrc_2022_datasets, so
     # dependencies can be found
     . /setup.bash
-    python3 -m pip install git+https://github.com/rr-learning/rrc_2022_datasets.git@v1.0.0
+    python3 -m pip install git+https://github.com/rr-learning/rrc_2022_datasets.git@v1
 
     # cleanup build and source files to reduce image size
     rm -rf build src log
