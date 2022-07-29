@@ -112,7 +112,7 @@ source /usr/share/colcon_cd/function/colcon_cd.sh
 
 
 %labels
-    Version rrc2022-1
+    Version rrc2022-2
 
 
 %help

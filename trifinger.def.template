@@ -18,6 +18,11 @@ From: %BASE_IMAGE%
     # dependencies can be found
     . /setup.bash
     python3 -m pip install git+https://github.com/rr-learning/rrc_2022_datasets.git@v1
+    # The command above somehow pulls a newer version of OpenCV (>=4.2.0.34) in
+    # while 4.2.0 (without .34) is already installed and sufficient.
+    # The problem is that the pip-installed version does not include the codecs
+    # for MP4 videos, so get rid of it.
+    python3 -m pip uninstall -y opencv-python
 
     # cleanup build and source files to reduce image size
     rm -rf build src log
