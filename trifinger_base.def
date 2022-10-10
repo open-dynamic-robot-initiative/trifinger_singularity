@@ -73,6 +73,7 @@ From: ros:foxy-ros-base
         python3-ipdb \
         python3-psutil \
         python3-venv
+    python3 -m pip install line-profiler
 
 
     # Run Dependencies
