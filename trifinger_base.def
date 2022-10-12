@@ -87,8 +87,8 @@ From: ros:foxy-ros-base
         python3-progressbar \
         python3-yaml
 
-    # newer numpy version is needed for pinocchio
-    python3 -m pip install numpy==1.20.3
+    # newer numpy version is needed
+    python3 -m pip install numpy==1.23.3
 
     # we unfortunately need a newer version of scipy for the Rotation class
     python3 -m pip install scipy==1.5.4
