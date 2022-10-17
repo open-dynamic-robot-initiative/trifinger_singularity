@@ -99,7 +99,7 @@ From: ros:foxy-ros-base
     python3 -m pip install zarr==2.8.3
 
     # pin == pinocchio
-    python3 -m pip install pin==2.6.0
+    python3 -m pip install pin==2.6.10
 
 
     # clean up
