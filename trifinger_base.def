@@ -44,18 +44,7 @@ From: ros:foxy-ros-base
 
     # for building documentation
     apt-get install -y doxygen
-    # Pin mistune to 1.x (see github.com/Azure/azure-sdk-for-python/issues/22019)
-    # TODO: remove obsolete dependencies once documentation build through CMake uses bcat
-    python3 -m pip install \
-        doxypypy \
-        sphinx \
-        'mistune<2.0.0' \
-        m2r \
-        recommonmark \
-        breathe \
-        sphinxcontrib-moderncmakedomain \
-        sphinx-rtd-theme \
-        git+https://github.com/machines-in-motion/breathing-cat
+    python3 -m pip install git+https://github.com/machines-in-motion/breathing-cat
 
     # for code formatting
     python3 -m pip install black cmakelang
