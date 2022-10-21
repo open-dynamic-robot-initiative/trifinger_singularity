@@ -44,7 +44,7 @@ From: ros:foxy-ros-base
 
     # for building documentation
     apt-get install -y doxygen
-    python3 -m pip install git+https://github.com/machines-in-motion/breathing-cat
+    python3 -m pip install breathing-cat
 
     # for code formatting
     python3 -m pip install black cmakelang
