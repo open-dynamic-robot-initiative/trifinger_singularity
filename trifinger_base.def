@@ -7,6 +7,9 @@ From: ros:foxy-ros-base
 #From: ./ros_foxy-ros-base.sif
 
 %post
+    set -e
+    export DEBIAN_FRONTEND=noninteractive
+
     ROS_DISTRO=foxy
 
     apt-get update
