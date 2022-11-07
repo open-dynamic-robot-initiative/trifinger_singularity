@@ -42,6 +42,7 @@ From: ros:foxy-ros-base
         libxmu-dev \
         libyaml-cpp-dev \
         ros-${ROS_DISTRO}-ament-cmake-nose \
+        ros-${ROS_DISTRO}-eigenpy \
         ros-${ROS_DISTRO}-xacro \
         ros-${ROS_DISTRO}-yaml-cpp-vendor
 
