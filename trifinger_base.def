@@ -43,6 +43,7 @@ From: ros:foxy-ros-base
         libyaml-cpp-dev \
         ros-${ROS_DISTRO}-ament-cmake-nose \
         ros-${ROS_DISTRO}-eigenpy \
+        ros-${ROS_DISTRO}-pinocchio \
         ros-${ROS_DISTRO}-xacro \
         ros-${ROS_DISTRO}-yaml-cpp-vendor
 
@@ -90,9 +91,6 @@ From: ros:foxy-ros-base
     python3 -m pip install gym==0.23.1
     python3 -m pip install namegenerator
     python3 -m pip install zarr==2.8.3
-
-    # pin == pinocchio
-    python3 -m pip install pin==2.6.10
 
 
     # clean up
