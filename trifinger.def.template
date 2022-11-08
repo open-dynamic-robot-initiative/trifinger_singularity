@@ -4,7 +4,8 @@ Bootstrap: localimage
 From: %BASE_IMAGE%
 
 %files
-    workspace/workspace /opt/blmc_ei
+    %WS_DIR% /opt/blmc_ei
+
 %post -c /bin/bash
     set -o errexit
     set -o nounset
@@ -14,7 +15,6 @@ From: %BASE_IMAGE%
     echo "export IMAGE_BUILD_DATE=\"${NOW}\"" >> $SINGULARITY_ENVIRONMENT
 
     cd /opt/blmc_ei
-    bash -c ". /setup.bash; colcon build %BUILD_OPTIONS%"
 
     # store git revision of each package (so we know which versions were used)
     for d in src/*/
@@ -25,6 +25,7 @@ From: %BASE_IMAGE%
         echo ""
     done > git_status.txt
 
+    bash -c ". /setup.bash; colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release %CMAKE_ARGS%"
     echo ". /opt/blmc_ei/install/local_setup.bash" >> /setup.bash
 
     # cleanup build and source files to reduce image size
