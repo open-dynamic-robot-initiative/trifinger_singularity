@@ -80,6 +80,8 @@ From: ros:foxy-ros-base
         python3-opencv \
         python3-pandas \
         python3-progressbar \
+        python3-tabulate \
+        python3-urwid \
         python3-yaml
 
     # newer numpy version is needed
