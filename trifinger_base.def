@@ -59,6 +59,7 @@ From: ros:foxy-ros-base
     # ===================
 
     apt-get install -y \
+        clang-tidy \
         gdb \
         valgrind \
         tmux \
