@@ -13,6 +13,8 @@ on:
       - master
     paths:
       - "*.def"
+      - "Makefile"
+      - "*.template"
   workflow_dispatch:
 
 jobs:
