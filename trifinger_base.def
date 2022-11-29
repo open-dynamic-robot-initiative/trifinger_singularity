@@ -15,14 +15,20 @@ From: ros:foxy-ros-base
     apt-get update
     apt-get dist-upgrade -y
 
-    # Build Dependencies
-    # ==================
+    # basic tools
+    apt-get install -y wget curl less python3-pip
 
-    apt-get install -y clang clang-format wget python3-pip curl
+    # alternative compilers
+    apt-get install -y clang-12
+    update-alternatives --install /usr/bin/clang clang /usr/bin/clang-12 12
+    update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-12 12
 
     # upgrade pip to latest version (>=21 is needed)
     python3 -m pip install --upgrade pip
     python3 -m pip --version
+
+    # Build and Run Dependencies
+    # ==========================
 
     apt-get install -y \
         freeglut3-dev \
@@ -52,6 +58,7 @@ From: ros:foxy-ros-base
     python3 -m pip install breathing-cat
 
     # for code formatting
+    apt-get install -y clang-format
     python3 -m pip install black cmakelang
 
 
@@ -70,9 +77,6 @@ From: ros:foxy-ros-base
         python3-venv
     python3 -m pip install line-profiler
 
-
-    # Run Dependencies
-    # ================
 
     apt-get install -y \
         python3-empy \
