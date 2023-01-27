@@ -11,8 +11,9 @@ on:
   push:
     branches:
       - master
-    paths:
-      - "*.def"
+    paths-ignore:
+      - "README.md"
+      - "LICENSE"
   workflow_dispatch:
 
 jobs:
@@ -22,8 +23,9 @@ jobs:
         steps:
             - name: Install Apptainer
               run: |
-                wget https://github.com/apptainer/apptainer/releases/download/v1.0.2/apptainer_1.0.2_amd64.deb
-                sudo apt-get install ./apptainer_1.0.2_amd64.deb
+                apptainer_version=1.1.0
+                wget https://github.com/apptainer/apptainer/releases/download/v${apptainer_version}/apptainer_${apptainer_version}_amd64.deb
+                sudo apt-get install ./apptainer_${apptainer_version}_amd64.deb
 
             - name: Check out code for the container build
               uses: actions/checkout@v2
@@ -33,13 +35,19 @@ jobs:
                 python3 -m pip install treep
 
             - name: Build trifinger_base.sif
-              run: make trifinger_base.sif USE_SUDO=1
+              run: make trifinger_base.sif
 
             - name: Build trifinger_user.sif
-              run: make trifinger_user.sif USE_SUDO=1
+              run: make trifinger_user.sif
 
             - name: Build trifinger_robot.sif
-              run: make trifinger_robot.sif USE_SUDO=1
+              run: make trifinger_robot.sif
+
+            - name: Build solo_user.sif
+              run: make solo_user.sif
+
+            - name: Build solo_robot.sif
+              run: make solo_robot.sif
 
             - name: Login and Deploy Container
               run: |
@@ -55,3 +63,5 @@ jobs:
                 apptainer push trifinger_base.sif oras://ghcr.io/${GITHUB_REPOSITORY}/trifinger_base:${tag}
                 apptainer push trifinger_user.sif oras://ghcr.io/${GITHUB_REPOSITORY}/trifinger_user:${tag}
                 apptainer push trifinger_robot.sif oras://ghcr.io/${GITHUB_REPOSITORY}/trifinger_robot:${tag}
+                apptainer push solo_user.sif oras://ghcr.io/${GITHUB_REPOSITORY}/solo_user:${tag}
+                apptainer push solo_robot.sif oras://ghcr.io/${GITHUB_REPOSITORY}/solo_robot:${tag}

@@ -1,4 +1,6 @@
 *.sif
 trifinger_robot.def
 trifinger_user.def
-workspace/
+solo_user.def
+solo_robot.def
+build/

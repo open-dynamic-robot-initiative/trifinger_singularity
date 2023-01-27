@@ -1,13 +1,24 @@
-# TriFinger Singularity Images
+# TriFinger Apptainer/Singularity Images
 
-Singularity definition files related to the TriFinger project.
+Apptainer definition files related to the TriFinger project.
 
 
-## Requirements
+## Get Pre-Build Containers
 
-For building the base images only a recent version of
-[Singularity](https://singularity.hpcng.org) and an internet connection is
-required.
+You can pull pre-build containers directly with apptainer.  For example for the
+latest `trifinger_user` container:
+
+    apptainer pull oras://ghcr.io/open-dynamic-robot-initiative/trifinger_singularity/trifinger_user:latest
+
+Simply adjust the name and tag at the end accordingly for the other containers.
+
+
+## Build Containers Yourself
+
+### Requirements
+
+For building the base images only a recent version of Singularity or
+[Apptainer](https://apptainer.org) and an internet connection is required.
 
 For building the images containing the TriFinger software (*trifinger_user* and
 *trifinger_robot*) the following applications are required in addition:
@@ -19,7 +30,7 @@ Further you will need a GitHub account with an SSH key set up, otherwise cloning
 the repositories via `treep` will not work.
 
 
-## General: Building Images
+### General: Building Images
 
 To build a specific image (let's say `trifinger_base.sif`), simply call:
 
