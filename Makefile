@@ -12,12 +12,13 @@ build/trifinger:
 		git clone https://github.com/machines-in-motion/treep_machines_in_motion.git; \
 		treep --clone-https ROBOT_FINGERS
 
-build/solo:
-	@echo "Clone workspace to './build/solo'"
-	mkdir -p build/solo
-	cd build/solo; \
+build/solo_bolt:
+	@echo "Clone workspace to './build/solo_bolt'"
+	mkdir -p build/solo_bolt
+	cd build/solo_bolt; \
 		git clone https://github.com/machines-in-motion/treep_machines_in_motion.git; \
-		treep --clone-https ROBOT_INTERFACES_SOLO
+		treep --clone-https ROBOT_INTERFACES_SOLO; \
+		treep --clone-https ROBOT_INTERFACES_BOLT;
 
 .PHONY: clean
 clean:
@@ -50,15 +51,15 @@ trifinger_robot.def: trifinger.def.template trifinger_base_pylon.sif build/trifi
 		-e "s/%CMAKE_ARGS%/-DOS_VERSION=preempt-rt/" \
 		trifinger.def.template > $@
 
-solo_user.def: trifinger.def.template trifinger_base.sif build/solo
+solo_bolt_user.def: trifinger.def.template trifinger_base.sif build/solo_bolt
 	sed -e "s/%BASE_IMAGE%/trifinger_base.sif/" \
-		-e "s/%WS_DIR%/build\/solo\/workspace/" \
+		-e "s/%WS_DIR%/build\/solo_bolt\/workspace/" \
 		-e "s/%CMAKE_ARGS%//" \
 		trifinger.def.template > $@
 
-solo_robot.def: trifinger.def.template trifinger_base.sif build/solo
+solo_bolt_robot.def: trifinger.def.template trifinger_base.sif build/solo_bolt
 	sed -e "s/%BASE_IMAGE%/trifinger_base.sif/" \
-		-e "s/%WS_DIR%/build\/solo\/workspace/" \
+		-e "s/%WS_DIR%/build\/solo_bolt\/workspace/" \
 		-e "s/%CMAKE_ARGS%/-DOS_VERSION=preempt-rt/" \
 		trifinger.def.template > $@
 

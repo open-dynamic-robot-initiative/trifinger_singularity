@@ -1,6 +1,6 @@
 *.sif
 trifinger_robot.def
 trifinger_user.def
-solo_user.def
-solo_robot.def
+solo_bolt_user.def
+solo_bolt_robot.def
 build/
