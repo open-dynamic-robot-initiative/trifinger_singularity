@@ -65,8 +65,4 @@ solo_robot.def: trifinger.def.template trifinger_base.sif build/solo
 
 # build arbitrary def file
 %.sif: %.def
-ifeq ($(USE_SUDO),1)
-	sudo singularity build $@ $<
-else
-	singularity build --fakeroot $@ $<
-endif
+	apptainer build $@ $<
