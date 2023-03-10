@@ -1,0 +1,101 @@
+# Base image with development tools
+Bootstrap: localimage
+From: ./trifinger_base_pylon.sif
+
+%post -c /bin/bash
+    set -e
+    export DEBIAN_FRONTEND=noninteractive
+
+    apt-get update
+
+    wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.deb
+    apt-get install -y ./nvim-linux64.deb
+
+    apt-get install -y \
+        clang-tidy \
+        clangd-12 \
+        fzf \
+        gdb \
+        ipython3 \
+        python3-ipdb \
+        python3-psutil \
+        python3-venv \
+        silversearcher-ag \
+        tmux \
+        valgrind
+
+    # symlink clangd-12 to clangd
+    ln -s $(which clangd-12) /usr/bin/clangd
+
+    python3 -m pip install -U \
+        black \
+        flake8 \
+        flake8-bugbear \
+        line-profiler \
+        mypy \
+        pylsp-mypy \
+        python-lsp-black \
+        python-lsp-ruff \
+        python-lsp-server \
+        ruff
+
+    # mypy stub packages
+    python3 -m pip install -U \
+        types-colorama \
+        types-docutils \
+        types-Pygments \
+        types-PyYAML \
+        types-setuptools \
+        types-toml \
+        types-tqdm
+
+
+    # install go (needed for lazygit)
+    wget https://go.dev/dl/go1.19.4.linux-amd64.tar.gz
+    tar -C /usr/local -xzf go1.19.4.linux-amd64.tar.gz
+
+    GOBIN=/usr/local/bin/ /usr/local/go/bin/go install github.com/jesseduffield/lazygit@latest
+
+
+
+
+    # clean up
+    apt-get clean
+    pip cache purge
+
+
+    echo '
+# search for install dir to source local workspace
+start_dir="$PWD"
+prev=.
+while [[ "$PWD" != "$prev" ]]; do
+    if [ -d "$PWD/install" ]; then
+        echo "Sourcing $PWD/install/local_setup.bash"
+        . "$PWD/install/local_setup.bash"
+        break
+    fi
+    prev="$PWD"
+    cd ..
+done
+cd "$start_dir"
+' >> /setup.bash
+
+    # create a runscript that uses bash
+    cat > /runscript.bash << \EOM
+#!/bin/bash
+set -e
+
+# setup environment
+source /setup.bash
+exec "$@"
+EOM
+
+
+%environment
+    export EDITOR=nvim
+    export VISUAL=nvim
+
+
+%runscript
+    exec bash /runscript.bash "$@"
+
