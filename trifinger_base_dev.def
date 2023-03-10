@@ -69,9 +69,10 @@ From: ./trifinger_base_pylon.sif
 start_dir="$PWD"
 prev=.
 while [[ "$PWD" != "$prev" ]]; do
-    if [ -d "$PWD/install" ]; then
-        echo "Sourcing $PWD/install/local_setup.bash"
-        . "$PWD/install/local_setup.bash"
+    _setupfile="$PWD/install/local_setup.bash"
+    if [ -e "${_setupfile}" ]; then
+        echo "Sourcing ${_setupfile}"
+        . "${_setupfile}"
         break
     fi
     prev="$PWD"
