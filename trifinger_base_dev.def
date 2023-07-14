@@ -46,6 +46,7 @@ From: ./trifinger_base_pylon.sif
         types-Pygments \
         types-PyYAML \
         types-setuptools \
+        types-tabulate \
         types-toml \
         types-tqdm
 
