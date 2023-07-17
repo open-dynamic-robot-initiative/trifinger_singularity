@@ -25,7 +25,8 @@ clean:
 	rm -rf build
 	rm -f trifinger_user.def
 	rm -f trifinger_robot.def
-	rm -f solo_robot.def
+	rm -f solo_bolt_user.def
+	rm -f solo_bolt_robot.def
 
 .PHONY: clean_sif
 clean_sif:
