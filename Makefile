@@ -1,4 +1,4 @@
-sifs = trifinger_base.sif trifinger_base_pylon.sif trifinger_user.sif trifinger_robot.sif solo_robot.sif
+sifs = trifinger_base.sif trifinger_base_pylon.sif trifinger_user.sif trifinger_robot.sif solo_bolt_user.sif solo_bolt_robot.sif
 
 USE_SUDO = 0
 
