@@ -20,7 +20,7 @@ From: %BASE_IMAGE%
     for d in src/*/
     do
         echo "${d#*/}"
-        git -C "$d" describe 2> /dev/null
+        git -C "$d" describe --always 2> /dev/null
         git --no-pager -C "$d" show --pretty='[%cs] %d: %s' --no-patch 2> /dev/null
         git -C "$d" status -s 2> /dev/null
         echo ""
