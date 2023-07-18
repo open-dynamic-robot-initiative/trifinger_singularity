@@ -8,6 +8,8 @@ From: ./trifinger_base.sif
     #pylon/pylon-5.2.0.13457-x86_64 /pylon
 
 %post -c /bin/bash
+    set -e
+    export DEBIAN_FRONTEND=noninteractive
 
     #cd /pylon
     #sudo tar -C /opt -xzf pylonSDK*.tar.gz
@@ -61,10 +63,14 @@ From: ./trifinger_base.sif
     fi
 
     version="5.2.0.13457"
+    checksum=9d4f70aae93012d6ca21bb4aff706ce409da155a446e86b90d00f0dd0a26fd55
     pkg=pylon_${version}-deb0_${pkgarch}.deb
     url="https://dnb-public-downloads-misc.s3.eu-central-1.amazonaws.com/pylon/${pkg}"
 
     wget --no-check-certificate -O $pkg $url
+    # verify checksum (to make sure the package on the server wasn't modified)
+    echo "${checksum} ${pkg}" | sha256sum --check || exit 2
+
     dpkg -i $pkg
 
     rm $pkg
