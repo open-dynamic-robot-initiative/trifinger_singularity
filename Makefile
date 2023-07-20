@@ -23,13 +23,9 @@ build/solo_bolt:
 .PHONY: clean
 clean:
 	rm -rf build
-	rm -f trifinger_user.def
-	rm -f trifinger_robot.def
-	rm -f solo_bolt_user.def
-	rm -f solo_bolt_robot.def
 
 .PHONY: clean_sif
-clean_sif:
+clean-sif:
 	rm -f $(sifs)
 
 
@@ -40,29 +36,33 @@ clean_sif:
 
 trifinger_base_pylon.def: trifinger_base.sif
 
-trifinger_user.def: trifinger.def.template trifinger_base.sif build/trifinger
-	sed -e "s/%BASE_IMAGE%/trifinger_base.sif/" \
-		-e "s/%WS_DIR%/build\/trifinger\/workspace/" \
-		-e "s/%CMAKE_ARGS%//" \
-		trifinger.def.template > $@
+# Images using the "trifinger.def" file are different as build-args need to be
+# passed to them
+trifinger_user.sif: trifinger.def trifinger_base.sif build/trifinger
+	apptainer build \
+		--build-arg BASE_IMAGE=trifinger_base.sif \
+		--build-arg WS_DIR=build/trifinger/workspace \
+		$@ trifinger.def
 
-trifinger_robot.def: trifinger.def.template trifinger_base_pylon.sif build/trifinger
-	sed -e "s/%BASE_IMAGE%/trifinger_base_pylon.sif/" \
-		-e "s/%WS_DIR%/build\/trifinger\/workspace/" \
-		-e "s/%CMAKE_ARGS%/-DOS_VERSION=preempt-rt/" \
-		trifinger.def.template > $@
+trifinger_robot.sif: trifinger.def trifinger_base_pylon.sif build/trifinger
+	apptainer build \
+		--build-arg BASE_IMAGE=trifinger_base_pylon.sif \
+		--build-arg WS_DIR=build/trifinger/workspace \
+		--build-arg REALTIME_BUILD=true \
+		$@ trifinger.def
 
-solo_bolt_user.def: trifinger.def.template trifinger_base.sif build/solo_bolt
-	sed -e "s/%BASE_IMAGE%/trifinger_base.sif/" \
-		-e "s/%WS_DIR%/build\/solo_bolt\/workspace/" \
-		-e "s/%CMAKE_ARGS%//" \
-		trifinger.def.template > $@
+solo_bolt_user.sif: trifinger.def trifinger_base.sif build/solo_bolt
+	apptainer build \
+		--build-arg BASE_IMAGE=trifinger_base.sif \
+		--build-arg WS_DIR=build/solo_bolt/workspace \
+		$@ trifinger.def
 
-solo_bolt_robot.def: trifinger.def.template trifinger_base.sif build/solo_bolt
-	sed -e "s/%BASE_IMAGE%/trifinger_base.sif/" \
-		-e "s/%WS_DIR%/build\/solo_bolt\/workspace/" \
-		-e "s/%CMAKE_ARGS%/-DOS_VERSION=preempt-rt/" \
-		trifinger.def.template > $@
+solo_bolt_robot.sif: trifinger.def trifinger_base.sif build/solo_bolt
+	apptainer build \
+		--build-arg BASE_IMAGE=trifinger_base.sif \
+		--build-arg WS_DIR=build/solo_bolt/workspace \
+		--build-arg REALTIME_BUILD=true \
+		$@ trifinger.def
 
 
 # build arbitrary def file

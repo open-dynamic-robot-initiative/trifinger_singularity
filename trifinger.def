@@ -1,10 +1,14 @@
 # Install the BLMC_EI project software in the image so it can be used without
 # building
 Bootstrap: localimage
-From: %BASE_IMAGE%
+From: {{ BASE_IMAGE }}
+
+%arguments
+    BASE_IMAGE=trifinger_base.sif
+    REALTIME_BUILD=false
 
 %files
-    %WS_DIR% /opt/blmc_ei
+    {{ WS_DIR }} /opt/blmc_ei
 
 %post -c /bin/bash
     set -o errexit
@@ -26,7 +30,14 @@ From: %BASE_IMAGE%
         echo ""
     done > git_status.txt
 
-    bash -c ". /setup.bash; colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release %CMAKE_ARGS%"
+    # explicitly set OS version to preempt-rt if REALTIME_BUILD=true
+    if [ {{ REALTIME_BUILD }} = true ]; then
+        CMAKE_ARG_OS_VERSION=-DOS_VERSION=preempt-rt
+    else
+        CMAKE_ARG_OS_VERSION=
+    fi
+
+    bash -c ". /setup.bash; colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release ${CMAKE_ARG_OS_VERSION}"
     echo ". /opt/blmc_ei/install/local_setup.bash" >> /setup.bash
 
     # cleanup build and source files to reduce image size
