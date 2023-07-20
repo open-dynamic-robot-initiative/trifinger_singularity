@@ -23,7 +23,7 @@ jobs:
         steps:
             - name: Install Apptainer
               run: |
-                apptainer_version=1.1.0
+                apptainer_version=1.2.0
                 wget https://github.com/apptainer/apptainer/releases/download/v${apptainer_version}/apptainer_${apptainer_version}_amd64.deb
                 sudo apt-get install ./apptainer_${apptainer_version}_amd64.deb
 
