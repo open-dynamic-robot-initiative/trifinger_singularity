@@ -28,7 +28,7 @@ jobs:
                 sudo apt-get install ./apptainer_${apptainer_version}_amd64.deb
 
             - name: Check out code for the container build
-              uses: actions/checkout@v2
+              uses: actions/checkout@v3
 
             - name: Install treep
               run: |
