@@ -8,26 +8,9 @@ From: ./trifinger_base_pylon.sif
 
     apt-get update
 
-    # BEGIN neovim
-
-    # wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.deb
-    # apt-get install -y ./nvim-linux64.deb
-
-    # install neovim from appimage (since there are no official deb anymore)
-
-    wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
-    chmod a+x nvim.appimage
-
-    # extract the appimage as there is no FUSE in the container
-    ./nvim.appimage --appimage-extract
-
-    # move to /opt and add a symlink in /usr/local/bin (so that it is in the
-    # PATH)
-    mv ./squashfs-root /opt/nvim
-    ln -s /opt/nvim/usr/bin/nvim /usr/local/bin
-
-    # END neovim
-
+    # Install neovim
+    wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz
+    tar -xzf nvim-linux64.tar.gz -C /usr/local --strip-components=1
 
     apt-get install -y \
         clang-tidy \
@@ -74,8 +57,6 @@ From: ./trifinger_base_pylon.sif
     tar -C /usr/local -xzf go1.19.4.linux-amd64.tar.gz
 
     GOBIN=/usr/local/bin/ /usr/local/go/bin/go install github.com/jesseduffield/lazygit@latest
-
-
 
 
     # clean up
