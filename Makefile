@@ -39,12 +39,14 @@ trifinger_base_pylon.def: trifinger_base.sif
 # Images using the "trifinger.def" file are different as build-args need to be
 # passed to them
 trifinger_user.sif: trifinger.def trifinger_base.sif build/trifinger
+	@echo "Build $@..."
 	apptainer build \
 		--build-arg BASE_IMAGE=trifinger_base.sif \
 		--build-arg WS_DIR=build/trifinger/workspace \
 		$@ trifinger.def
 
 trifinger_robot.sif: trifinger.def trifinger_base_pylon.sif build/trifinger
+	@echo "Build $@..."
 	apptainer build \
 		--build-arg BASE_IMAGE=trifinger_base_pylon.sif \
 		--build-arg WS_DIR=build/trifinger/workspace \
@@ -52,12 +54,14 @@ trifinger_robot.sif: trifinger.def trifinger_base_pylon.sif build/trifinger
 		$@ trifinger.def
 
 solo_bolt_user.sif: trifinger.def trifinger_base.sif build/solo_bolt
+	@echo "Build $@..."
 	apptainer build \
 		--build-arg BASE_IMAGE=trifinger_base.sif \
 		--build-arg WS_DIR=build/solo_bolt/workspace \
 		$@ trifinger.def
 
 solo_bolt_robot.sif: trifinger.def trifinger_base.sif build/solo_bolt
+	@echo "Build $@..."
 	apptainer build \
 		--build-arg BASE_IMAGE=trifinger_base.sif \
 		--build-arg WS_DIR=build/solo_bolt/workspace \
@@ -67,4 +71,5 @@ solo_bolt_robot.sif: trifinger.def trifinger_base.sif build/solo_bolt
 
 # build arbitrary def file
 %.sif: %.def
+	@echo "Build $@..."
 	apptainer build $@ $<
