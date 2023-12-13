@@ -36,6 +36,8 @@ clean-sif:
 
 trifinger_base_pylon.def: trifinger_base.sif
 
+trifinger_base_dev.def: trifinger_base_pylon.sif
+
 # Images using the "trifinger.def" file are different as build-args need to be
 # passed to them
 trifinger_user.sif: trifinger.def trifinger_base.sif build/trifinger
