@@ -9,11 +9,20 @@ From: ros:{{ ROS_DISTRO }}-ros-base
 %arguments
     ROS_DISTRO=humble
 
+%setup
+    # needs to be created before %post, so it can be used as bind destination
+    mkdir "${SINGULARITY_ROOTFS}/_cache"
+
 %post
     set -e
     export DEBIAN_FRONTEND=noninteractive
+    export XDG_CACHE_HOME=/_cache
 
     ROS_DISTRO={{ ROS_DISTRO }}
+
+    # remove config that clears apt cache after each call (we want to keep it
+    # in the bound folder); https://stackoverflow.com/a/73060162/2095383
+    rm /etc/apt/apt.conf.d/docker-clean
 
     apt-get update
     apt-get dist-upgrade -y
@@ -99,11 +108,6 @@ From: ros:{{ ROS_DISTRO }}-ros-base
     python3 -m pip install pybullet
     python3 -m pip install gym
     python3 -m pip install namegenerator
-
-
-    # clean up
-    apt-get clean
-    pip cache purge
 
 
     # create a setup file
