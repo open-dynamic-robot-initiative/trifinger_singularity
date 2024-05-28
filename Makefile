@@ -39,20 +39,20 @@ clean-sif:
 # the same name.  Images that have dependencies should resolve them in a target
 # for the specific def file.
 
-trifinger_base.sif: trifinger_base.def build/cache
+trifinger_base.sif: trifinger_base.def | build/cache
 	@echo "Build $@..."
 	apptainer build \
 		--bind "${PWD}/build/cache/apt:/var/cache/apt" \
 		--bind "${PWD}/build/cache:/_cache" \
 		$@ $<
 
-trifinger_base_pylon.sif: trifinger_base_pylon.def trifinger_base.sif build/cache
+trifinger_base_pylon.sif: trifinger_base_pylon.def trifinger_base.sif | build/cache
 	@echo "Build $@..."
 	apptainer build \
 		--bind "${PWD}/build/cache:/_cache" \
 		$@ $<
 
-trifinger_base_dev.sif: trifinger_base_dev.def trifinger_base_pylon.sif build/cache
+trifinger_base_dev.sif: trifinger_base_dev.def trifinger_base_pylon.sif | build/cache
 	@echo "Build $@..."
 	apptainer build \
 		--bind "${PWD}/build/cache/apt:/var/cache/apt" \
