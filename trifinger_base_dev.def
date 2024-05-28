@@ -5,12 +5,22 @@ From: ./trifinger_base_pylon.sif
 %post -c /bin/bash
     set -e
     export DEBIAN_FRONTEND=noninteractive
+    export XDG_CACHE_HOME=/_cache
 
     apt-get update
 
+    function cached_wget() {
+        dest="${XDG_CACHE_HOME}/$1"
+        url="$2"
+        if [ ! -e "${dest}" ]; then
+            wget "${url}" -O "${dest}"
+        fi
+    }
+
     # Install neovim
-    wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz
-    tar -xzf nvim-linux64.tar.gz -C /usr/local --strip-components=1
+    nvim_pkg=nvim-linux64.tar.gz
+    cached_wget ${nvim_pkg} https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz
+    tar -xzf "${XDG_CACHE_HOME}/${nvim_pkg}" -C /usr/local --strip-components=1
 
     apt-get install -y \
         clang-tidy \
@@ -53,15 +63,12 @@ From: ./trifinger_base_pylon.sif
 
 
     # install go (needed for lazygit)
-    wget https://go.dev/dl/go1.19.4.linux-amd64.tar.gz
-    tar -C /usr/local -xzf go1.19.4.linux-amd64.tar.gz
+    go_version=1.22.3
+    go_pkg=go${go_version}.linux-amd64.tar.gz
+    cached_wget ${go_pkg} https://go.dev/dl/${go_pkg}
+    tar -C /usr/local -xzf "${XDG_CACHE_HOME}/${go_pkg}"
 
     GOBIN=/usr/local/bin/ /usr/local/go/bin/go install github.com/jesseduffield/lazygit@latest
-
-
-    # clean up
-    apt-get clean
-    pip cache purge
 
 
     echo '

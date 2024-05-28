@@ -52,7 +52,12 @@ trifinger_base_pylon.sif: trifinger_base_pylon.def trifinger_base.sif build/cach
 		--bind "${PWD}/build/cache:/_cache" \
 		$@ $<
 
-trifinger_base_dev.def: trifinger_base_pylon.sif
+trifinger_base_dev.sif: trifinger_base_dev.def trifinger_base_pylon.sif build/cache
+	@echo "Build $@..."
+	apptainer build \
+		--bind "${PWD}/build/cache/apt:/var/cache/apt" \
+		--bind "${PWD}/build/cache:/_cache" \
+		$@ $<
 
 # Images using the "trifinger.def" file are different as build-args need to be
 # passed to them
