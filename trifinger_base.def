@@ -110,6 +110,7 @@ From: ros:{{ ROS_DISTRO }}-ros-base
         python3-progressbar \
         python3-scipy \
         python3-tabulate \
+        python3-tqdm \
         python3-urwid \
         python3-yaml \
         python3-zarr
