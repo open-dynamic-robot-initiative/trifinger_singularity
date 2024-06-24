@@ -119,6 +119,9 @@ From: ros:{{ ROS_DISTRO }}-ros-base
     python3 -m pip install numpy==1.23.3
 
     python3 -m pip install pybullet
+    # newer numba version is needed for some projects
+    python3 -m pip install numba==0.59.1
+
     python3 -m pip install gym
     python3 -m pip install namegenerator
 
