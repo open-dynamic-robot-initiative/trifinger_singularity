@@ -12,8 +12,13 @@ From: {{ BASE_IMAGE }}
 
 %post -c /bin/bash
     set -o errexit
-    set -o nounset
     set -o pipefail
+
+    export DEBIAN_FRONTEND=noninteractive
+    export XDG_CACHE_HOME=/_cache
+    export UV_SYSTEM_PYTHON=1
+    export UV_LINK_MODE=copy
+    export UV_COMPILE_BYTECODE=1
 
     NOW=`date`
     echo "export IMAGE_BUILD_DATE=\"${NOW}\"" >> $SINGULARITY_ENVIRONMENT
@@ -37,8 +42,23 @@ From: {{ BASE_IMAGE }}
         CMAKE_ARG_OS_VERSION=
     fi
 
-    bash -c ". /setup.bash; colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release ${CMAKE_ARG_OS_VERSION}"
+    (
+        . /setup.bash
+        colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release ${CMAKE_ARG_OS_VERSION}
+    )
     echo ". /opt/blmc_ei/install/local_setup.bash" >> /setup.bash
+
+    # activate the workspace before installing rrc_2022_datasets, so
+    # dependencies can be found
+    (
+        . /setup.bash
+        uv pip install git+https://github.com/rr-learning/rrc_2022_datasets.git@v1
+    )
+    # The command above somehow pulls a newer version of OpenCV (>=4.2.0.34) in
+    # while 4.2.0 (without .34) is already installed and sufficient.
+    # The problem is that the pip-installed version does not include the codecs
+    # for MP4 videos, so get rid of it.
+    uv pip uninstall opencv-python
 
     # cleanup build and source files to reduce image size
     rm -rf build src log

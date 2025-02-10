@@ -66,6 +66,7 @@ trifinger_user.sif: trifinger.def trifinger_base.sif build/trifinger
 	apptainer build \
 		--build-arg BASE_IMAGE=trifinger_base.sif \
 		--build-arg WS_DIR=build/trifinger/workspace \
+		--bind "${PWD}/build/cache:/_cache" \
 		$@ trifinger.def
 
 trifinger_robot.sif: trifinger.def trifinger_base_pylon.sif build/trifinger
@@ -74,6 +75,7 @@ trifinger_robot.sif: trifinger.def trifinger_base_pylon.sif build/trifinger
 		--build-arg BASE_IMAGE=trifinger_base_pylon.sif \
 		--build-arg WS_DIR=build/trifinger/workspace \
 		--build-arg REALTIME_BUILD=true \
+		--bind "${PWD}/build/cache:/_cache" \
 		$@ trifinger.def
 
 solo_bolt_user.sif: trifinger.def trifinger_base.sif build/solo_bolt
@@ -81,6 +83,7 @@ solo_bolt_user.sif: trifinger.def trifinger_base.sif build/solo_bolt
 	apptainer build \
 		--build-arg BASE_IMAGE=trifinger_base.sif \
 		--build-arg WS_DIR=build/solo_bolt/workspace \
+		--bind "${PWD}/build/cache:/_cache" \
 		$@ trifinger.def
 
 solo_bolt_robot.sif: trifinger.def trifinger_base.sif build/solo_bolt
@@ -89,6 +92,7 @@ solo_bolt_robot.sif: trifinger.def trifinger_base.sif build/solo_bolt
 		--build-arg BASE_IMAGE=trifinger_base.sif \
 		--build-arg WS_DIR=build/solo_bolt/workspace \
 		--build-arg REALTIME_BUILD=true \
+		--bind "${PWD}/build/cache:/_cache" \
 		$@ trifinger.def
 
 
