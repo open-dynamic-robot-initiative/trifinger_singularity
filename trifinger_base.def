@@ -13,7 +13,7 @@ From: ros:{{ ROS_DISTRO }}-ros-base
     # needs to be created before %post, so it can be used as bind destination
     mkdir "${SINGULARITY_ROOTFS}/_cache"
 
-%post
+%post -c /bin/bash
     set -e
     export DEBIAN_FRONTEND=noninteractive
     export XDG_CACHE_HOME=/_cache
@@ -37,9 +37,16 @@ From: ros:{{ ROS_DISTRO }}-ros-base
     update-alternatives --install /usr/bin/clang clang /usr/bin/clang-12 12
     update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-12 12
 
-    # upgrade pip to latest version (>=21 is needed)
-    python3 -m pip install --upgrade pip
-    python3 -m pip --version
+    # use uv instead of pip as it seems to be better at resolving complex
+    # dependencies
+    python3 -m pip install uv
+    export UV_SYSTEM_PYTHON=1
+    export UV_LINK_MODE=copy
+    export UV_COMPILE_BYTECODE=1
+
+    # collect all python packages here to install together in the end (may help
+    # to better resolve dependencies)
+    python_packages=()
 
     # Build and Run Dependencies
     # ==========================
@@ -79,11 +86,12 @@ From: ros:{{ ROS_DISTRO }}-ros-base
 
     # for building documentation
     apt-get install -y doxygen
-    python3 -m pip install breathing-cat
+    python_packages+=( breathing-cat )
 
     # for code formatting
     apt-get install -y clang-format
-    python3 -m pip install black cmakelang
+    python_packages+=( black )
+    python_packages+=( cmakelang )
 
 
     # Tools for Debugging
@@ -99,7 +107,7 @@ From: ros:{{ ROS_DISTRO }}-ros-base
         python3-ipdb \
         python3-psutil \
         python3-venv
-    python3 -m pip install line-profiler
+    python_packages+=( line-profiler )
 
 
     apt-get install -y \
@@ -108,22 +116,24 @@ From: ros:{{ ROS_DISTRO }}-ros-base
         python3-opencv \
         python3-pandas \
         python3-progressbar \
-        python3-scipy \
         python3-tabulate \
         python3-tqdm \
         python3-urwid \
         python3-yaml \
         python3-zarr
 
-    # newer numpy version is needed
-    python3 -m pip install numpy==1.23.3
-
+    # newer numpy version is needed (and scipy needs to match)
+    python_packages+=( "numpy>=1.23.3,<2" )
+    python_packages+=( scipy )
     # newer numba version is needed for some projects
-    python3 -m pip install numba==0.59.1
+    python_packages+=( numba==0.59.1 )
 
-    python3 -m pip install pybullet==3.2.6
-    python3 -m pip install gym
-    python3 -m pip install namegenerator
+    python_packages+=( pybullet==3.2.6 )
+    python_packages+=( namegenerator )
+
+    python_packages+=( gym )
+
+    uv pip install ${python_packages[@]}
 
 
     # create a setup file
