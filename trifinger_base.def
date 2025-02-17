@@ -117,6 +117,7 @@ From: ros:{{ ROS_DISTRO }}-ros-base
 
     apt-get install -y \
         python3-empy \
+        python3-h5py \
         python3-matplotlib \
         python3-opencv \
         python3-pandas \
