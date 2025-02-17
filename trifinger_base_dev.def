@@ -43,8 +43,6 @@ From: ./trifinger_base_pylon.sif
 
     uv pip install -U \
         black \
-        flake8 \
-        flake8-bugbear \
         line-profiler \
         mypy \
         pylsp-mypy \
