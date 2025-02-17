@@ -6,6 +6,9 @@ From: ./trifinger_base_pylon.sif
     set -e
     export DEBIAN_FRONTEND=noninteractive
     export XDG_CACHE_HOME=/_cache
+    export UV_SYSTEM_PYTHON=1
+    export UV_LINK_MODE=copy
+    export UV_COMPILE_BYTECODE=1
 
     apt-get update
 
@@ -38,7 +41,7 @@ From: ./trifinger_base_pylon.sif
     # symlink clangd-12 to clangd
     ln -s $(which clangd-12) /usr/bin/clangd
 
-    python3 -m pip install -U \
+    uv pip install -U \
         black \
         flake8 \
         flake8-bugbear \
@@ -51,7 +54,7 @@ From: ./trifinger_base_pylon.sif
         ruff
 
     # mypy stub packages
-    python3 -m pip install -U \
+    uv pip install -U \
         types-colorama \
         types-docutils \
         types-Pygments \
