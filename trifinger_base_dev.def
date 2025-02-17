@@ -18,8 +18,8 @@ From: ./trifinger_base_pylon.sif
     }
 
     # Install neovim
-    nvim_pkg=nvim-linux64.tar.gz
-    cached_wget ${nvim_pkg} https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz
+    nvim_pkg=nvim-linux-x86_64.tar.gz
+    cached_wget ${nvim_pkg} https://github.com/neovim/neovim/releases/download/stable/${nvim_pkg}
     tar -xzf "${XDG_CACHE_HOME}/${nvim_pkg}" -C /usr/local --strip-components=1
 
     apt-get install -y \
