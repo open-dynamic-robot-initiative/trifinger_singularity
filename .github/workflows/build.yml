@@ -19,16 +19,16 @@ on:
 jobs:
     build:
         name: Build
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-latest
         steps:
             - name: Install Apptainer
               run: |
-                apptainer_version=1.2.0
+                apptainer_version=1.4.0
                 wget https://github.com/apptainer/apptainer/releases/download/v${apptainer_version}/apptainer_${apptainer_version}_amd64.deb
                 sudo apt-get install ./apptainer_${apptainer_version}_amd64.deb
 
             - name: Check out code for the container build
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Install treep
               run: |
