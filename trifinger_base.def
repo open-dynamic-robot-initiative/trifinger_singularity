@@ -122,6 +122,7 @@ From: ros:{{ ROS_DISTRO }}-ros-base
         python3-opencv \
         python3-pandas \
         python3-progressbar \
+        python3-ruamel.yaml \
         python3-tabulate \
         python3-tqdm \
         python3-urwid \
