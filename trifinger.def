@@ -17,6 +17,7 @@ From: {{ BASE_IMAGE }}
     export DEBIAN_FRONTEND=noninteractive
     export XDG_CACHE_HOME=/_cache
     export UV_SYSTEM_PYTHON=1
+    export UV_BREAK_SYSTEM_PACKAGES=1
     export UV_LINK_MODE=copy
     export UV_COMPILE_BYTECODE=1
 

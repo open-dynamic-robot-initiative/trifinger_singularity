@@ -7,6 +7,7 @@ From: ./trifinger_base_pylon.sif
     export DEBIAN_FRONTEND=noninteractive
     export XDG_CACHE_HOME=/_cache
     export UV_SYSTEM_PYTHON=1
+    export UV_BREAK_SYSTEM_PACKAGES=1
     export UV_LINK_MODE=copy
     export UV_COMPILE_BYTECODE=1
 
@@ -26,13 +27,13 @@ From: ./trifinger_base_pylon.sif
     tar -xzf "${XDG_CACHE_HOME}/${nvim_pkg}" -C /usr/local --strip-components=1
 
     # Install Apptainer
-    apptainer_version=1.4.0
+    apptainer_version=1.4.1
     cached_wget apptainer_${apptainer_version}.deb https://github.com/apptainer/apptainer/releases/download/v${apptainer_version}/apptainer_${apptainer_version}_amd64.deb
     apt-get install -y "${XDG_CACHE_HOME}/apptainer_${apptainer_version}.deb"
 
     apt-get install -y \
         clang-tidy \
-        clangd-12 \
+        clangd-19 \
         fzf \
         gdb \
         ipython3 \
@@ -43,8 +44,8 @@ From: ./trifinger_base_pylon.sif
         tmux \
         valgrind
 
-    # symlink clangd-12 to clangd
-    ln -s $(which clangd-12) /usr/bin/clangd
+    # symlink clangd-19 to clangd
+    ln -s $(which clangd-19) /usr/bin/clangd
 
     uv pip install -U \
         black \

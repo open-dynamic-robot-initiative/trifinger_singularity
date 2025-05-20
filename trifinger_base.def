@@ -7,7 +7,7 @@ From: ros:{{ ROS_DISTRO }}-ros-base
 #From: ./ros_foxy-ros-base.sif
 
 %arguments
-    ROS_DISTRO=humble
+    ROS_DISTRO=jazzy
 
 %setup
     # needs to be created before %post, so it can be used as bind destination
@@ -30,17 +30,18 @@ From: ros:{{ ROS_DISTRO }}-ros-base
     apt-get dist-upgrade -y
 
     # basic tools
-    apt-get install -y wget curl less python3-pip parallel
+    apt-get install -y wget curl less parallel
 
     # alternative compilers
-    apt-get install -y clang-12
-    update-alternatives --install /usr/bin/clang clang /usr/bin/clang-12 12
-    update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-12 12
+    apt-get install -y clang-19
+    update-alternatives --install /usr/bin/clang clang /usr/bin/clang-19 19
+    update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-19 19
 
-    # use uv instead of pip as it seems to be better at resolving complex
-    # dependencies
-    python3 -m pip install uv
+    # use uv instead of pip as it is faster and seems to be better at resolving
+    # complex dependencies
+    curl -LsSf https://astral.sh/uv/install.sh | env UV_UNMANAGED_INSTALL="/usr/local/bin" sh
     export UV_SYSTEM_PYTHON=1
+    export UV_BREAK_SYSTEM_PACKAGES=1
     export UV_LINK_MODE=copy
     export UV_COMPILE_BYTECODE=1
 
@@ -63,26 +64,16 @@ From: ros:{{ ROS_DISTRO }}-ros-base
         libedit-dev \
         libfmt-dev \
         libncurses5-dev \
+        libnsl-dev \
         libopenblas-dev \
         libopencv-dev \
         libopencv-contrib-dev \
+        libtomlplusplus-dev \
         libxmu-dev \
         libyaml-cpp-dev \
-        ros-${ROS_DISTRO}-ament-cmake-nose \
         ros-${ROS_DISTRO}-pinocchio \
         ros-${ROS_DISTRO}-xacro \
         ros-${ROS_DISTRO}-yaml-cpp-vendor
-
-
-    # install tomlplusplus from source
-    cd "${tmp_dir}"
-    git clone https://github.com/marzer/tomlplusplus.git -b v3.4.0
-    cd tomlplusplus
-    mkdir build
-    cd build
-    cmake -DCMAKE_BUILD_TYPE=Release ..
-    make
-    make install
 
     # for building documentation
     apt-get install -y doxygen
@@ -114,27 +105,26 @@ From: ros:{{ ROS_DISTRO }}-ros-base
         python3-empy \
         python3-h5py \
         python3-matplotlib \
+        python3-numpy \
         python3-opencv \
         python3-pandas \
         python3-progressbar \
         python3-ruamel.yaml \
+        python3-scipy \
         python3-tabulate \
         python3-tqdm \
         python3-urwid \
         python3-yaml \
         python3-zarr
 
-    # newer numpy version is needed (and scipy needs to match)
-    python_packages+=( "numpy>=1.23.3,<2" )
-    python_packages+=( scipy )
-    # newer numba version is needed for some projects
-    python_packages+=( numba==0.59.1 )
+    # make sure we keep numpy at the version of python3-numpy
+    python_packages+=( numpy==1.26.4 )
+    #python_packages+=( scipy==1.11.4 )
 
     python_packages+=( gymnasium==1.2.0 )
-    python_packages+=( pybullet==3.2.6 )
+    python_packages+=( numba==0.61.2 )
+    python_packages+=( pybullet==3.2.7 )
     python_packages+=( namegenerator )
-
-    python_packages+=( gym )
 
     uv pip install ${python_packages[@]}
 
@@ -150,7 +140,7 @@ source /usr/share/colcon_cd/function/colcon_cd.sh
     rm -rf "${tmp_dir}"
 
 %labels
-    Version 3.0.0
+    Version 4.0.0
 
 
 %help
