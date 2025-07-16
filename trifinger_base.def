@@ -130,6 +130,7 @@ From: ros:{{ ROS_DISTRO }}-ros-base
     # newer numba version is needed for some projects
     python_packages+=( numba==0.59.1 )
 
+    python_packages+=( gymnasium==1.2.0 )
     python_packages+=( pybullet==3.2.6 )
     python_packages+=( namegenerator )
 
