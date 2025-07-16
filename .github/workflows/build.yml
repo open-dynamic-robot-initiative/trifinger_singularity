@@ -43,11 +43,11 @@ jobs:
             - name: Build trifinger_robot.sif
               run: make trifinger_robot.sif
 
-            - name: Build solo_bolt_user.sif
-              run: make solo_bolt_user.sif
+            #- name: Build solo_bolt_user.sif
+            #  run: make solo_bolt_user.sif
 
-            - name: Build solo_bolt_robot.sif
-              run: make solo_bolt_robot.sif
+            #- name: Build solo_bolt_robot.sif
+            #  run: make solo_bolt_robot.sif
 
             - name: Login and Deploy Container
               run: |
@@ -63,5 +63,5 @@ jobs:
                 apptainer push trifinger_base.sif oras://ghcr.io/${GITHUB_REPOSITORY}/trifinger_base:${tag}
                 apptainer push trifinger_user.sif oras://ghcr.io/${GITHUB_REPOSITORY}/trifinger_user:${tag}
                 apptainer push trifinger_robot.sif oras://ghcr.io/${GITHUB_REPOSITORY}/trifinger_robot:${tag}
-                apptainer push solo_bolt_user.sif oras://ghcr.io/${GITHUB_REPOSITORY}/solo_bolt_user:${tag}
-                apptainer push solo_bolt_robot.sif oras://ghcr.io/${GITHUB_REPOSITORY}/solo_bolt_robot:${tag}
+                #apptainer push solo_bolt_user.sif oras://ghcr.io/${GITHUB_REPOSITORY}/solo_bolt_user:${tag}
+                #apptainer push solo_bolt_robot.sif oras://ghcr.io/${GITHUB_REPOSITORY}/solo_bolt_robot:${tag}
