@@ -49,6 +49,7 @@ From: ./trifinger_base_pylon.sif
 
     uv pip install -U \
         black \
+        esbonio \
         line-profiler \
         mypy \
         pylsp-mypy \
