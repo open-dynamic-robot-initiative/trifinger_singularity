@@ -21,11 +21,13 @@ jobs:
         name: Build
         runs-on: ubuntu-latest
         steps:
-            - name: Install Apptainer
+            - name: Install latest Apptainer via PPA
               run: |
-                apptainer_version=1.5.5
-                wget https://github.com/apptainer/apptainer/releases/download/v${apptainer_version}/apptainer_${apptainer_version}_amd64.deb
-                sudo apt-get install ./apptainer_${apptainer_version}_amd64.deb
+                apt-get update
+                apt-get install -y software-properties-common
+                add-apt-repository -y ppa:apptainer/ppa
+                apt-get update
+                apt-get install -y apptainer
 
             - name: Check out code for the container build
               uses: actions/checkout@v4
